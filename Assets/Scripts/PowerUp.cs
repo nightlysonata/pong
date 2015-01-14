@@ -3,6 +3,11 @@ using System.Collections;
 
 public class PowerUp : MonoBehaviour
 {
+    //test
+
+    public PlayerBehaviour player1;
+    public PlayerBehaviour player2;
+    public GameObject ball;
     // ______________________________________________________________________________________________________________________________
 
     private float speeda;
@@ -48,10 +53,12 @@ public class PowerUp : MonoBehaviour
         #region powerup activation player1 keyboard
         if (Input.GetKeyDown(KeyCode.Alpha1) && powerupPlayer1.Count > 0)
         {
+            //Powerup(player1, powerupPlayer1.getValue(0));
             powerupPlayer1.RemoveAt(0);
         }
         if (Input.GetKeyDown(KeyCode.Alpha2) && powerupPlayer1.Count > 1)
         {
+            //Powerup(player1, powerupPlayer1.getValue(1));
             powerupPlayer1.RemoveAt(1);
         }
         if (Input.GetKeyDown(KeyCode.Alpha3) && powerupPlayer1.Count > 2)
@@ -66,6 +73,7 @@ public class PowerUp : MonoBehaviour
         #region powerup activation player2 keyboard
         if (Input.GetKeyDown(KeyCode.Keypad1) && powerupPlayer1.Count > 0)
         {
+            Powerup(player2, powerupPlayer2.getValue(0));
             powerupPlayer2.RemoveAt(0);
         }
         if (Input.GetKeyDown(KeyCode.Keypad2) && powerupPlayer1.Count > 1)
@@ -243,8 +251,14 @@ public class PowerUp : MonoBehaviour
     {
         //float seconds = Random.Range(10.0f, 15.0f);
         yield return new WaitForSeconds(1);
-        //int id = Random.Range(1, 8);
-        powerupid = powerups[1];
+        int id = Random.Range(1, 40);
+        //Debug.Log(id%2);
+        //powerupid = powerups[1];
+        if (id%2 == 0)    
+            renderer.material.color = Color.green;  
+        else 
+            renderer.material.color = Color.red;
+        
         
         //Debug.Log(powerupid);
         //y = Random.Range(-200f, 200f);
@@ -265,17 +279,25 @@ public class PowerUp : MonoBehaviour
             if (other.name == "Player 1")
             {
                 SetPositionAndSpeedPause();
-                if (powerupPlayer1.Count < 4)
+
+                if (checkEffect(powerupid) == -1)
+                    Powerup(player1, powerupid);
+
+                else if (powerupPlayer1.Count < 4 && checkEffect(powerupid) == 1)
                 {
                     powerupPlayer1.Add(powerupid);
                     powerup1++;
-                }
+                } 
 
             }
             else if (other.name == "Player 2")
             {
+
                 SetPositionAndSpeedPause();
-                if (powerupPlayer2.Count < 4)
+                if (checkEffect(powerupid) == -1) {
+                    Powerup(player2, powerupid);
+                }
+                else if (powerupPlayer2.Count < 4 && checkEffect(powerupid)==1)
                 {
                     powerupPlayer2.Add(powerupid);
                     powerup2++;
@@ -285,6 +307,35 @@ public class PowerUp : MonoBehaviour
         }
     }
 
+    void Powerup(PlayerBehaviour player, int id){
+        
+        if (player.name == "Player 1")
+        {
+            player = player1;
+        }
+        else if (player.name == "Player 2")
+            player = player2;
+
+        switch (powerupid) { 
+            case 0: //change player speed <faster>
+                player.speed = 150f;
+                break;
+            case 1: // change player speed <slower>
+                player.speed = 50f;
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    //check if positive or negative power up
+    int checkEffect(int i) {
+        if (i==0)
+            return 1;
+        else
+            return -1;
+    }
     // ______________________________________________________________________________________________________________________________
 
     void OnGUI()
