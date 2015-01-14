@@ -3,10 +3,10 @@ using System.Collections;
 
 public class PowerUp : MonoBehaviour
 {
-    //test
 
     public PlayerBehaviour player1;
     public PlayerBehaviour player2;
+
     // ______________________________________________________________________________________________________________________________
 
     private float speeda;
@@ -52,12 +52,12 @@ public class PowerUp : MonoBehaviour
         #region powerup activation player1 keyboard
         if (Input.GetKeyDown(KeyCode.Alpha1) && powerupPlayer1.Count > 0)
         {
-            //Powerup(player1, powerupPlayer1.getValue(0));
+            Powerup(player1, powerupPlayer1.getValue(0));
             powerupPlayer1.RemoveAt(0);
         }
         if (Input.GetKeyDown(KeyCode.Alpha2) && powerupPlayer1.Count > 1)
         {
-            //Powerup(player1, powerupPlayer1.getValue(1));
+            Powerup(player1, powerupPlayer1.getValue(1));
             powerupPlayer1.RemoveAt(1);
         }
         if (Input.GetKeyDown(KeyCode.Alpha3) && powerupPlayer1.Count > 2)
@@ -77,6 +77,7 @@ public class PowerUp : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Keypad2) && powerupPlayer1.Count > 1)
         {
+            Powerup(player2, powerupPlayer2.getValue(1));
             powerupPlayer2.RemoveAt(1);
         }
         if (Input.GetKeyDown(KeyCode.Keypad3) && powerupPlayer1.Count > 2)
@@ -254,7 +255,7 @@ public class PowerUp : MonoBehaviour
         //Debug.Log(id%2);
         //powerupid = powerups[1];
         powerupid = id % 2;
-        if (id%2 == 0)    
+        if (id%2 == 1)    
             renderer.material.color = Color.green;  
         else 
             renderer.material.color = Color.red;
@@ -285,7 +286,7 @@ public class PowerUp : MonoBehaviour
 
                 if (powerupPlayer1.Count < 4 && checkEffect(powerupid) == 1)
                 {
-                    powerupPlayer1.Add(powerupid+1);
+                    powerupPlayer1.Add(powerupid);
                     powerup1++;
                 } 
 
@@ -299,7 +300,7 @@ public class PowerUp : MonoBehaviour
                 
                 if (powerupPlayer2.Count < 4 && checkEffect(powerupid)==1)
                 {
-                    powerupPlayer2.Add(powerupid+1);
+                    powerupPlayer2.Add(powerupid);
                     powerup2++;
                 }
 
@@ -316,11 +317,11 @@ public class PowerUp : MonoBehaviour
             player = player2;
 
         switch (powerupid) { 
-            case 0: //change player speed <faster>
-                player.speed = 150f;
-                break;
-            case 1: // change player speed <slower>
+            case 0: //change player speed <slower>
                 player.speed = 50f;
+                break;
+            case 1: // change player speed <faster>
+                player.speed = 150f;
                 break;
             default:
                 break;
@@ -330,7 +331,7 @@ public class PowerUp : MonoBehaviour
 
     //check if positive or negative power up
     int checkEffect(int i) {
-        if (i==0)
+        if (i==1)
             return 1;
         else
             return -1;
