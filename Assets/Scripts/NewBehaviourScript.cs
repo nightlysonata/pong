@@ -66,11 +66,6 @@ public class NewBehaviourScript : MonoBehaviour
     // Prüfe in jedem Update() ob eine Kollision mit den Grenzen des Spielfelds vorliegt
     void Update()
     {
-        //Debug.Log(GameData.Instance.buttonVal + " - " + GameData.Instance.SW2);
-        if (GameData.Instance.powerup1 && GameData.Instance.player1)
-        {
-            StartCoroutine(ballspeedup());
-        }
         if (startbool)
         {
             if (Input.GetKeyDown("o") || (GameData.Instance.buttonVal & GameData.Instance.SW1) != 0 || (GameData.Instance.buttonVal1 & GameData.Instance.SW1) != 0)
@@ -111,34 +106,6 @@ public class NewBehaviourScript : MonoBehaviour
     //        i = 0;
     //    }
     //}
-
-    IEnumerator ballspeedup()
-    {
-        Vector3 speedup = new Vector3(4, 4, 0);
-        for (int j = 0; j < 1; j++)
-        {
-            if (procentualx == 0f && procentualy == 0f)
-            {
-                procentualx = rigidbody.velocity.x / 100;
-                procentualy = rigidbody.velocity.y / 100;
-                Debug.Log("x " + procentualx);
-                Debug.Log("y " + procentualy);
-            }
-        }
-        //float x = rigidbody.velocity.x;
-        //Debug.Log(x);
-        //float y = rigidbody.velocity.y;
-        //Debug.Log(x);
-        //float z = rigidbody.velocity.z;
-        //Debug.Log(x);
-        rigidbody.velocity = new Vector3(rigidbody.velocity.x + (procentualx * speedup.x), rigidbody.velocity.y + (procentualx * speedup.y), rigidbody.velocity.z);
-        yield return new WaitForSeconds(0.25f);
-        rigidbody.velocity = new Vector3(rigidbody.velocity.x - (procentualx * speedup.x), rigidbody.velocity.y - (procentualx * speedup.y), rigidbody.velocity.z);
-        procentualx = 0f;
-        procentualy = 0f;
-        GameData.Instance.powerup1 = false;
-        Debug.Log("2: " + GameData.Instance.powerup1);
-    }
 
     // ______________________________________________________________________________________________________________________________
 

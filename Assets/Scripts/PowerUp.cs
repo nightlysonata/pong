@@ -25,6 +25,24 @@ public class PowerUp : MonoBehaviour
     private int[] powerups = new int[8];
     private int powerupid;
 
+    private int collision;
+
+    private int player;
+
+    private bool small1;
+    private bool small2;
+
+    private bool big1;
+    private bool big2;
+
+    private bool middlel1;
+    private bool middlel2;
+
+    private bool start = true;
+
+    public GameObject Player1;
+    public GameObject Player2;
+
     // ______________________________________________________________________________________________________________________________
 
     // Use this for initialization
@@ -45,39 +63,151 @@ public class PowerUp : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (transform.position == new Vector3(0, 300, 0))
+        {
+            start = true;
+        }
+        else
+        {
+            start = false;
+        }
         #region powerup activation player1 keyboard
         if (Input.GetKeyDown(KeyCode.Alpha1) && powerupPlayer1.Count > 0)
         {
+            player = 1;
+            switch (powerupid)
+            {
+                case 2:
+                    smallerBat();
+                    break;
+                case 4:
+                    biggerBat();
+                    break;
+                case 6:
+                    middle();
+                    break;
+            }
             powerupPlayer1.RemoveAt(0);
         }
         if (Input.GetKeyDown(KeyCode.Alpha2) && powerupPlayer1.Count > 1)
         {
+            player = 1;
+            switch (powerupid)
+            {
+                case 2:
+                    smallerBat();
+                    break;
+                case 4:
+                    biggerBat();
+                    break;
+                case 6:
+                    middle();
+                    break;
+            }
             powerupPlayer1.RemoveAt(1);
         }
         if (Input.GetKeyDown(KeyCode.Alpha3) && powerupPlayer1.Count > 2)
         {
+            player = 1;
+            switch (powerupid)
+            {
+                case 2:
+                    smallerBat();
+                    break;
+                case 4:
+                    biggerBat();
+                    break;
+                case 6:
+                    middle();
+                    break;
+            }
             powerupPlayer1.RemoveAt(2);
         }
         if (Input.GetKeyDown(KeyCode.Alpha4) && powerupPlayer1.Count > 3)
         {
+            player = 1;
+            switch (powerupid)
+            {
+                case 2:
+                    smallerBat();
+                    break;
+                case 4:
+                    biggerBat();
+                    break;
+                case 6:
+                    middle();
+                    break;
+            }
             powerupPlayer1.RemoveAt(3);
         }
         #endregion
         #region powerup activation player2 keyboard
-        if (Input.GetKeyDown(KeyCode.Keypad1) && powerupPlayer1.Count > 0)
+        if (Input.GetKeyDown(KeyCode.Alpha7) && powerupPlayer2.Count > 0)
         {
+            player = 2;
+            switch (powerupid)
+            {
+                case 2:
+                    smallerBat();
+                    break;
+                case 4:
+                    biggerBat();
+                    break;
+                case 6:
+                    middle();
+                    break;
+            }
             powerupPlayer2.RemoveAt(0);
         }
-        if (Input.GetKeyDown(KeyCode.Keypad2) && powerupPlayer1.Count > 1)
+        if (Input.GetKeyDown(KeyCode.Alpha8) && powerupPlayer2.Count > 1)
         {
+            player = 2;
+            switch (powerupid)
+            {
+                case 2:
+                    smallerBat();
+                    break;
+                case 4:
+                    biggerBat();
+                    break;
+                case 6:
+                    middle();
+                    break;
+            }
             powerupPlayer2.RemoveAt(1);
         }
-        if (Input.GetKeyDown(KeyCode.Keypad3) && powerupPlayer1.Count > 2)
+        if (Input.GetKeyDown(KeyCode.Alpha9) && powerupPlayer2.Count > 2)
         {
+            player = 2;
+            switch (powerupid)
+            {
+                case 2:
+                    smallerBat();
+                    break;
+                case 4:
+                    biggerBat();
+                    break;
+                case 6:
+                    middle();
+                    break;
+            }
             powerupPlayer2.RemoveAt(2);
         }
-        if (Input.GetKeyDown(KeyCode.Keypad4) && powerupPlayer1.Count > 3)
+        if (Input.GetKeyDown(KeyCode.Alpha0) && powerupPlayer2.Count > 3)
         {
+            player = 2;
+            switch (powerupid)
+            {
+                case 2:
+                    smallerBat();
+                    break;
+                case 4:
+                    biggerBat();
+                    break;
+                case 6:
+                    middle();
+                    break;
+            }
             powerupPlayer2.RemoveAt(3);
         }
         #endregion
@@ -139,6 +269,7 @@ public class PowerUp : MonoBehaviour
             }
         }
         #endregion
+
         #region powerup activation player1 2 controller
         if (GameData.Instance.toolbarInt == 2)
         {
@@ -186,7 +317,7 @@ public class PowerUp : MonoBehaviour
 
         if (powerupPlayer1.Count == 4 && powerupPlayer2.Count == 4)
         {
-            transform.position = new Vector3(300, 300, 0);
+            transform.position = new Vector3(0, 300, 0);
             return;
         }
         else
@@ -194,11 +325,11 @@ public class PowerUp : MonoBehaviour
             pause = false;
         }
 
-        if (Mathf.Abs(transform.position.x) > 200f && !pause)
+        if (Mathf.Abs(transform.position.x) > 180f && !pause)
         {
             SetPositionAndSpeedPause();
         }
-        if (!pause)
+        if (!pause && !start)
         {
             if (speeda < 0)
             {
@@ -217,18 +348,168 @@ public class PowerUp : MonoBehaviour
 
     void SetPositionAndSpeedPause()
     {
-        transform.position = new Vector3(300, 300, 0);
+        transform.position = new Vector3(0, 300, 0);
         SetPositionAndSpeed();
         pause = true;
     }
 
     // ______________________________________________________________________________________________________________________________
 
-    // id 1
-    void SpeedUp()
-    {
+    #region Powerup Smaller Bat (Negative & Positive)
 
+    void smallerBat()
+    {
+        if (powerupid == 1)
+        {
+            if (collision == 1)
+            {
+                StartCoroutine(negscale1());
+            }
+
+            else if (collision == 2)
+            {
+                StartCoroutine(negscale2());
+            }
+        }
+
+        if (powerupid == 2)
+        {
+            if (player == 1)
+            {
+                StartCoroutine(negscale2());
+            }
+            else if (player == 2)
+            {
+                StartCoroutine(negscale1());
+            }
+        }
     }
+
+    IEnumerator negscale1()
+    {
+        Vector3 first = Player1.transform.lossyScale;
+        Debug.Log("firstnegscale1" + first);
+        Player1.transform.localScale -= new Vector3(0, first.y * 0.3f, 0);
+        small1 = true;
+        yield return new WaitForSeconds(10.0f);
+        Player1.transform.localScale = new Vector3(2.5f, 30, 1);
+        small1 = false;
+    }
+
+    IEnumerator negscale2()
+    {
+        Vector3 first = Player2.transform.lossyScale;
+        Debug.Log("firstnegscale2" + first);
+        Player2.transform.localScale -= new Vector3(0, first.y * 0.3f, 0);
+        small2 = true;
+        yield return new WaitForSeconds(10.0f);
+        Player2.transform.localScale = new Vector3(2.5f, 30, 1);
+        small2 = false;
+    }
+
+    #endregion
+
+    #region Powerup Bigger Bat (Negative & Positive)
+    void biggerBat()
+    {
+        if (powerupid == 3)
+        {
+            if (collision == 1)
+            {
+                StartCoroutine(posscale1());
+            }
+
+            else if (collision == 2)
+            {
+                StartCoroutine(posscale2());
+            }
+        }
+
+        if (powerupid == 4)
+        {
+            if (player == 1)
+            {
+                StartCoroutine(posscale2());
+            }
+            else if (player == 2)
+            {
+                StartCoroutine(posscale1());
+            }
+        }
+    }
+
+    IEnumerator posscale1()
+    {
+        Vector3 first = Player2.transform.lossyScale;
+        Debug.Log("firstposscale1" + first);
+        Player2.transform.localScale += new Vector3(0, first.y * 0.3f, 0);
+        big2 = true;
+        yield return new WaitForSeconds(10.0f);
+        Player2.transform.localScale = first;
+        big2 = false;
+    }
+
+    IEnumerator posscale2()
+    {
+        Vector3 first = Player1.transform.lossyScale;
+        Debug.Log("firstposscale2" + first);
+        Player1.transform.localScale += new Vector3(0, first.y * 0.3f, 0);
+        big1 = true;
+        yield return new WaitForSeconds(10.0f);
+        Player1.transform.localScale = first;
+        big1 = false;
+    }
+    #endregion
+
+    #region Powerup Middle Line (Negative & Positive)
+    void middle()
+    {
+        if (powerupid == 5)
+        {
+            if (collision == 1)
+            {
+                StartCoroutine(middle2());
+            }
+
+            else if (collision == 2)
+            {
+                StartCoroutine(middle1());
+            }
+        }
+
+        if (powerupid == 6)
+        {
+            if (player == 1)
+            {
+                StartCoroutine(middle2());
+            }
+            else if (player == 2)
+            {
+                StartCoroutine(middle1());
+            }
+        }
+    }
+
+    IEnumerator middle1()
+    {
+        Vector3 first = Player2.transform.position;
+        Player2.transform.position -= new Vector3(first.x * 0.1f, 0, 0);
+        middlel2 = true;
+        yield return new WaitForSeconds(10.0f);
+        Player2.transform.position = new Vector3(Player2.transform.position.x * 1.10f, Player2.transform.position.y, 0);
+        middlel2 = false;
+    }
+
+    IEnumerator middle2()
+    {
+        Vector3 first = Player1.transform.position;
+        Player1.transform.position -= new Vector3(first.x * 0.1f, 0, 0);
+        middlel1 = true;
+        yield return new WaitForSeconds(10.0f);
+        Player1.transform.position = new Vector3(Player1.transform.position.x * 1.10f, Player1.transform.position.y, 0);
+        middlel1 = false;
+    }
+    #endregion
 
     // ______________________________________________________________________________________________________________________________
 
@@ -241,19 +522,12 @@ public class PowerUp : MonoBehaviour
 
     IEnumerator spawntime()
     {
-        //float seconds = Random.Range(10.0f, 15.0f);
-        yield return new WaitForSeconds(1);
-        //int id = Random.Range(1, 8);
-        powerupid = powerups[1];
-        
-        //Debug.Log(powerupid);
-        //y = Random.Range(-200f, 200f);
-        transform.position = new Vector3(0, 0, 0);
-        if (pause)
+        if (start) 
         {
-            speeda = Random.Range(-1.0f, 1.0f);
+            yield return new WaitForSeconds(10);
+            y = Random.Range(-90f, 90f);
+            transform.position = new Vector3(0, y, 0);
         }
-        pause = false;
     }
 
     // ______________________________________________________________________________________________________________________________
@@ -265,23 +539,53 @@ public class PowerUp : MonoBehaviour
             if (other.name == "Player 1")
             {
                 SetPositionAndSpeedPause();
-                if (powerupPlayer1.Count < 4)
+                if (powerupPlayer1.Count < 4 && powerupid != 1 && powerupid != 3 && powerupid != 5)
                 {
                     powerupPlayer1.Add(powerupid);
                     powerup1++;
                 }
+                collision = 1;
 
+                switch (powerupid)
+                {
+                    case 1:
+                        smallerBat();
+                        break;
+                    case 3:
+                        biggerBat();
+                        break;
+                    case 5:
+                        middle();
+                        break;
+                }
             }
             else if (other.name == "Player 2")
             {
                 SetPositionAndSpeedPause();
-                if (powerupPlayer2.Count < 4)
+                if (powerupPlayer2.Count < 4 && powerupid != 1 && powerupid != 3 && powerupid != 5)
                 {
                     powerupPlayer2.Add(powerupid);
                     powerup2++;
                 }
+                collision = 2;
 
+                switch (powerupid)
+                {
+                    case 1:
+                        smallerBat();
+                        break;
+                    case 3:
+                        biggerBat();
+                        break;
+                    case 5:
+                        middle();
+                        break;
+                }
             }
+        }
+        if (other.tag == "Ball")
+        {
+            this.transform.position = new Vector3(-this.transform.position.x, this.transform.position.y, this.transform.position.z);
         }
     }
 
