@@ -10,20 +10,16 @@ public class PowerUp : MonoBehaviour
     private float y;
     private bool pause = false;
 
-    private int powerup1 = 0;
-    private int powerup2 = 0;
+    private CircularBuffer<int> powerupsP1 = new CircularBuffer<int>(4);
+    private CircularBuffer<int> powerupsP2 = new CircularBuffer<int>(4);
 
-    private CircularBuffer<int> powerupPlayer1 = new CircularBuffer<int>(4);
-    private CircularBuffer<int> powerupPlayer2 = new CircularBuffer<int>(4);
-
-    private int actual1;
-    private int actual2;
-
+    //for circularBuffer
     private int index1 = 0;
     private int index2 = 0;
 
+    //kinds of powerups
     private int[] powerups = new int[8];
-    private int powerupid;
+    private int powerupID;
 
     private int collision;
 
@@ -43,6 +39,9 @@ public class PowerUp : MonoBehaviour
     public GameObject Player1;
     public GameObject Player2;
 
+    public PlayerBehaviour player1script;
+    public PlayerBehaviour player2script;
+
     // ______________________________________________________________________________________________________________________________
 
     // Use this for initialization
@@ -54,8 +53,6 @@ public class PowerUp : MonoBehaviour
         {
             powerups[i] = i;
         }
-        actual1 = powerupPlayer1.getValue(0);
-        actual2 = powerupPlayer2.getValue(0);
     }
 
     // ______________________________________________________________________________________________________________________________
@@ -72,143 +69,39 @@ public class PowerUp : MonoBehaviour
             start = false;
         }
         #region powerup activation player1 keyboard
-        if (Input.GetKeyDown(KeyCode.Alpha1) && powerupPlayer1.Count > 0)
+        if (Input.GetKeyDown(KeyCode.Alpha1) && powerupsP1.Count > 0)
         {
-            player = 1;
-            switch (powerupid)
-            {
-                case 2:
-                    smallerBat();
-                    break;
-                case 4:
-                    biggerBat();
-                    break;
-                case 6:
-                    middle();
-                    break;
-            }
-            powerupPlayer1.RemoveAt(0);
+            powerupsP1.RemoveAt(0);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha2) && powerupPlayer1.Count > 1)
+        if (Input.GetKeyDown(KeyCode.Alpha2) && powerupsP1.Count > 1)
         {
-            player = 1;
-            switch (powerupid)
-            {
-                case 2:
-                    smallerBat();
-                    break;
-                case 4:
-                    biggerBat();
-                    break;
-                case 6:
-                    middle();
-                    break;
-            }
-            powerupPlayer1.RemoveAt(1);
+            powerupsP1.RemoveAt(1);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha3) && powerupPlayer1.Count > 2)
+        if (Input.GetKeyDown(KeyCode.Alpha3) && powerupsP1.Count > 2)
         {
-            player = 1;
-            switch (powerupid)
-            {
-                case 2:
-                    smallerBat();
-                    break;
-                case 4:
-                    biggerBat();
-                    break;
-                case 6:
-                    middle();
-                    break;
-            }
-            powerupPlayer1.RemoveAt(2);
+            powerupsP1.RemoveAt(2);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha4) && powerupPlayer1.Count > 3)
-        {
-            player = 1;
-            switch (powerupid)
-            {
-                case 2:
-                    smallerBat();
-                    break;
-                case 4:
-                    biggerBat();
-                    break;
-                case 6:
-                    middle();
-                    break;
-            }
-            powerupPlayer1.RemoveAt(3);
+        if (Input.GetKeyDown(KeyCode.Alpha4) && powerupsP1.Count > 3)
+        {            
+            powerupsP1.RemoveAt(3);
         }
         #endregion
         #region powerup activation player2 keyboard
-        if (Input.GetKeyDown(KeyCode.Alpha7) && powerupPlayer2.Count > 0)
+        if (Input.GetKeyDown(KeyCode.Alpha7) && powerupsP2.Count > 0)
         {
-            player = 2;
-            switch (powerupid)
-            {
-                case 2:
-                    smallerBat();
-                    break;
-                case 4:
-                    biggerBat();
-                    break;
-                case 6:
-                    middle();
-                    break;
-            }
-            powerupPlayer2.RemoveAt(0);
+            powerupsP2.RemoveAt(0);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha8) && powerupPlayer2.Count > 1)
+        if (Input.GetKeyDown(KeyCode.Alpha8) && powerupsP2.Count > 1)
         {
-            player = 2;
-            switch (powerupid)
-            {
-                case 2:
-                    smallerBat();
-                    break;
-                case 4:
-                    biggerBat();
-                    break;
-                case 6:
-                    middle();
-                    break;
-            }
-            powerupPlayer2.RemoveAt(1);
+            powerupsP2.RemoveAt(1);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha9) && powerupPlayer2.Count > 2)
+        if (Input.GetKeyDown(KeyCode.Alpha9) && powerupsP2.Count > 2)
         {
-            player = 2;
-            switch (powerupid)
-            {
-                case 2:
-                    smallerBat();
-                    break;
-                case 4:
-                    biggerBat();
-                    break;
-                case 6:
-                    middle();
-                    break;
-            }
-            powerupPlayer2.RemoveAt(2);
+            powerupsP2.RemoveAt(2);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha0) && powerupPlayer2.Count > 3)
+        if (Input.GetKeyDown(KeyCode.Alpha0) && powerupsP2.Count > 3)
         {
-            player = 2;
-            switch (powerupid)
-            {
-                case 2:
-                    smallerBat();
-                    break;
-                case 4:
-                    biggerBat();
-                    break;
-                case 6:
-                    middle();
-                    break;
-            }
-            powerupPlayer2.RemoveAt(3);
+            powerupsP2.RemoveAt(3);
         }
         #endregion
 
@@ -242,7 +135,7 @@ public class PowerUp : MonoBehaviour
 
             if ((GameData.Instance.buttonVal & GameData.Instance.SW4) != 0 && GameData.Instance.lastButton != 1)
             {
-                powerupPlayer1.RemoveAt(index1);
+                powerupsP1.RemoveAt(index1);
                 GameData.Instance.lastButton = 1;
             }
         }
@@ -265,7 +158,7 @@ public class PowerUp : MonoBehaviour
             }
             if ((GameData.Instance.buttonVal1 & GameData.Instance.SW3) != 0)
             {
-                powerupPlayer2.RemoveAt(index2);
+                powerupsP2.RemoveAt(index2);
             }
         }
         #endregion
@@ -273,21 +166,21 @@ public class PowerUp : MonoBehaviour
         #region powerup activation player1 2 controller
         if (GameData.Instance.toolbarInt == 2)
         {
-            if (((GameData.Instance.buttonVal & GameData.Instance.SW6) != 0) && powerupPlayer1.Count > 0)
+            if (((GameData.Instance.buttonVal & GameData.Instance.SW6) != 0) && powerupsP1.Count > 0)
             {
-                powerupPlayer1.RemoveAt(0);
+                powerupsP1.RemoveAt(0);
             }
-            if (((GameData.Instance.buttonVal & GameData.Instance.SW4) != 0) && powerupPlayer1.Count > 1)
+            if (((GameData.Instance.buttonVal & GameData.Instance.SW4) != 0) && powerupsP1.Count > 1)
             {
-                powerupPlayer1.RemoveAt(1);
+                powerupsP1.RemoveAt(1);
             }
-            if (((GameData.Instance.buttonVal & GameData.Instance.SW3) != 0) && powerupPlayer1.Count > 2)
+            if (((GameData.Instance.buttonVal & GameData.Instance.SW3) != 0) && powerupsP1.Count > 2)
             {
-                powerupPlayer1.RemoveAt(2);
+                powerupsP1.RemoveAt(2);
             }
-            if (((GameData.Instance.buttonVal & GameData.Instance.SW5) != 0) && powerupPlayer1.Count > 3)
+            if (((GameData.Instance.buttonVal & GameData.Instance.SW5) != 0) && powerupsP1.Count > 3)
             {
-                powerupPlayer1.RemoveAt(3);
+                powerupsP1.RemoveAt(3);
             }
         }
 
@@ -295,27 +188,27 @@ public class PowerUp : MonoBehaviour
         #region powerup activation player2 2 controller
         if (GameData.Instance.toolbarInt == 2)
         {
-            if (((GameData.Instance.buttonVal1 & GameData.Instance.SW6) != 0) && powerupPlayer2.Count > 0)
+            if (((GameData.Instance.buttonVal1 & GameData.Instance.SW6) != 0) && powerupsP2.Count > 0)
             {
-                powerupPlayer2.RemoveAt(0);
+                powerupsP2.RemoveAt(0);
             }
-            if (((GameData.Instance.buttonVal1 & GameData.Instance.SW4) != 0) && powerupPlayer2.Count > 1)
+            if (((GameData.Instance.buttonVal1 & GameData.Instance.SW4) != 0) && powerupsP2.Count > 1)
             {
-                powerupPlayer2.RemoveAt(1);
+                powerupsP2.RemoveAt(1);
             }
-            if (((GameData.Instance.buttonVal1 & GameData.Instance.SW3) != 0) && powerupPlayer2.Count > 2)
+            if (((GameData.Instance.buttonVal1 & GameData.Instance.SW3) != 0) && powerupsP2.Count > 2)
             {
-                powerupPlayer2.RemoveAt(2);
+                powerupsP2.RemoveAt(2);
             }
-            if (((GameData.Instance.buttonVal1 & GameData.Instance.SW5) != 0) && powerupPlayer2.Count > 3)
+            if (((GameData.Instance.buttonVal1 & GameData.Instance.SW5) != 0) && powerupsP2.Count > 3)
             {
-                powerupPlayer2.RemoveAt(3);
+                powerupsP2.RemoveAt(3);
             }
         }
 
         #endregion
 
-        if (powerupPlayer1.Count == 4 && powerupPlayer2.Count == 4)
+        if (powerupsP1.Count == 4 && powerupsP2.Count == 4)
         {
             transform.position = new Vector3(0, 300, 0);
             return;
@@ -355,34 +248,20 @@ public class PowerUp : MonoBehaviour
 
     // ______________________________________________________________________________________________________________________________
 
+    void powerup(GameObject player, int id) {
+
+        if (player.name == "Player 1")
+            player = Player1;
+        else if (player.name == "Player 2")
+            player = Player2;
+
+    }
+
     #region Powerup Smaller Bat (Negative & Positive)
 
-    void smallerBat()
+    void smallerBat(GameObject player, int powerupID)
     {
-        if (powerupid == 1)
-        {
-            if (collision == 1)
-            {
-                StartCoroutine(negscale1());
-            }
 
-            else if (collision == 2)
-            {
-                StartCoroutine(negscale2());
-            }
-        }
-
-        if (powerupid == 2)
-        {
-            if (player == 1)
-            {
-                StartCoroutine(negscale2());
-            }
-            else if (player == 2)
-            {
-                StartCoroutine(negscale1());
-            }
-        }
     }
 
     IEnumerator negscale1()
@@ -412,7 +291,7 @@ public class PowerUp : MonoBehaviour
     #region Powerup Bigger Bat (Negative & Positive)
     void biggerBat()
     {
-        if (powerupid == 3)
+        if (powerupID == 3)
         {
             if (collision == 1)
             {
@@ -425,7 +304,7 @@ public class PowerUp : MonoBehaviour
             }
         }
 
-        if (powerupid == 4)
+        if (powerupID == 4)
         {
             if (player == 1)
             {
@@ -464,7 +343,7 @@ public class PowerUp : MonoBehaviour
     #region Powerup Middle Line (Negative & Positive)
     void middle()
     {
-        if (powerupid == 5)
+        if (powerupID == 5)
         {
             if (collision == 1)
             {
@@ -477,7 +356,7 @@ public class PowerUp : MonoBehaviour
             }
         }
 
-        if (powerupid == 6)
+        if (powerupID == 6)
         {
             if (player == 1)
             {
@@ -539,14 +418,13 @@ public class PowerUp : MonoBehaviour
             if (other.name == "Player 1")
             {
                 SetPositionAndSpeedPause();
-                if (powerupPlayer1.Count < 4 && powerupid != 1 && powerupid != 3 && powerupid != 5)
+                if (powerupsP1.Count < 4 && powerupID != 1 && powerupID != 3 && powerupID != 5)
                 {
-                    powerupPlayer1.Add(powerupid);
-                    powerup1++;
+                    powerupsP1.Add(powerupID);               
                 }
                 collision = 1;
 
-                switch (powerupid)
+                switch (powerupID)
                 {
                     case 1:
                         smallerBat();
@@ -562,14 +440,13 @@ public class PowerUp : MonoBehaviour
             else if (other.name == "Player 2")
             {
                 SetPositionAndSpeedPause();
-                if (powerupPlayer2.Count < 4 && powerupid != 1 && powerupid != 3 && powerupid != 5)
+                if (powerupsP2.Count < 4 && powerupID != 1 && powerupID != 3 && powerupID != 5)
                 {
-                    powerupPlayer2.Add(powerupid);
-                    powerup2++;
+                    powerupsP2.Add(powerupID);
                 }
                 collision = 2;
 
-                switch (powerupid)
+                switch (powerupID)
                 {
                     case 1:
                         smallerBat();
@@ -593,7 +470,7 @@ public class PowerUp : MonoBehaviour
 
     void OnGUI()
     {
-        GUI.Label(new Rect(10, 90, 220, 30), powerupPlayer1.getValue(0).ToString() + " " + powerupPlayer1.getValue(1).ToString() + " " + powerupPlayer1.getValue(2).ToString() + " " + powerupPlayer1.getValue(3).ToString());
-        GUI.Label(new Rect(10, 110, 220, 30), powerupPlayer2.getValue(0).ToString() + " " + powerupPlayer2.getValue(1).ToString() + " " + powerupPlayer2.getValue(2).ToString() + " " + powerupPlayer2.getValue(3).ToString()); ;
+        GUI.Label(new Rect(10, 90, 220, 30), powerupsP1.getValue(0).ToString() + " " + powerupsP1.getValue(1).ToString() + " " + powerupsP1.getValue(2).ToString() + " " + powerupsP1.getValue(3).ToString());
+        GUI.Label(new Rect(10, 110, 220, 30), powerupsP2.getValue(0).ToString() + " " + powerupsP2.getValue(1).ToString() + " " + powerupsP2.getValue(2).ToString() + " " + powerupsP2.getValue(3).ToString()); ;
     }
 }
