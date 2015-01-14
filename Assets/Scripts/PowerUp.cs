@@ -216,13 +216,13 @@ public class PowerUp : MonoBehaviour
 
         if ((GameData.Instance.buttonVal & GameData.Instance.SW6) == 0)
         {
-            GameData.Instance.lastButton = -1;
+            GameData.Instance.lastButton1 = -1;
         }
 
         if (GameData.Instance.toolbarInt == 1)
         {
-            Debug.Log(index1);
-            if ((GameData.Instance.buttonVal & GameData.Instance.SW6) != 0 && GameData.Instance.lastButton != 1)
+//            Debug.Log(index1);
+            if ((GameData.Instance.buttonVal & GameData.Instance.SW6) != 0 && GameData.Instance.lastButton1 != 1)
             {
                 if (index1 < 3)
                 {
@@ -232,18 +232,18 @@ public class PowerUp : MonoBehaviour
                 {
                     index1 = 0;
                 }
-                GameData.Instance.lastButton = 1;
+                GameData.Instance.lastButton1 = 1;
             }
 
             if ((GameData.Instance.buttonVal & GameData.Instance.SW4) == 0)
             {
-                GameData.Instance.lastButton = -1;
+                GameData.Instance.lastButton1 = -1;
             }
 
-            if ((GameData.Instance.buttonVal & GameData.Instance.SW4) != 0 && GameData.Instance.lastButton != 1)
+            if ((GameData.Instance.buttonVal & GameData.Instance.SW4) != 0 && GameData.Instance.lastButton1 != 1)
             {
                 powerupPlayer1.RemoveAt(index1);
-                GameData.Instance.lastButton = 1;
+                GameData.Instance.lastButton1 = 1;
             }
         }
 
@@ -251,7 +251,7 @@ public class PowerUp : MonoBehaviour
         #region powerup switch/activation player2 1 controller
         if (GameData.Instance.toolbarInt == 1)
         {
-            Debug.Log(index2);
+//            Debug.Log(index2);
             if ((GameData.Instance.buttonVal & GameData.Instance.SW5) != 0)
             {
                 if (index2 < 3)

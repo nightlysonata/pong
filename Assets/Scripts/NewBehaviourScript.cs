@@ -150,7 +150,7 @@ public class NewBehaviourScript : MonoBehaviour
             // setze den Normalenvektor des GameObjects und berechne dann die neue velocity durch Spiegelung an normal
             if (collider.name == "Player 1")
             {
-                Debug.Log("cikk");
+//                Debug.Log("cikk");
                 player1 = true;
                 GameData.Instance.Touched = true;
                 normal = new Vector3((collider.transform.right.x * (-1)), (collider.transform.right.y * (-1)), collider.transform.right.z);
@@ -159,7 +159,7 @@ public class NewBehaviourScript : MonoBehaviour
             }
             if (collider.name == "Player 2")
             {
-                Debug.Log("clikk");
+//                Debug.Log("clikk");
                 player1 = false;
                 GameData.Instance.Touched = true;
                 normal = new Vector3(collider.transform.right.x, collider.transform.right.y, collider.transform.right.z);

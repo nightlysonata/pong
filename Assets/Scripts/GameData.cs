@@ -49,6 +49,7 @@ public class GameData
     public int buttonVal;
     public int buttonVal1;
     public int lastButton;
+    public int lastButton1;
 
 
     // ______________________________________________________________________________________________________________________________
@@ -77,6 +78,7 @@ public class GameData
         buttonVal = 0;
         buttonVal1 = 0;
         lastButton = -1;
+        lastButton1 = -1;
         extreme = false;
     }
 
