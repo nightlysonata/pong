@@ -7,7 +7,6 @@ public class PowerUp : MonoBehaviour
 
     public PlayerBehaviour player1;
     public PlayerBehaviour player2;
-    public GameObject ball;
     // ______________________________________________________________________________________________________________________________
 
     private float speeda;
@@ -254,6 +253,7 @@ public class PowerUp : MonoBehaviour
         int id = Random.Range(1, 40);
         //Debug.Log(id%2);
         //powerupid = powerups[1];
+        powerupid = id % 2;
         if (id%2 == 0)    
             renderer.material.color = Color.green;  
         else 
@@ -281,11 +281,11 @@ public class PowerUp : MonoBehaviour
                 SetPositionAndSpeedPause();
 
                 if (checkEffect(powerupid) == -1)
-                    Powerup(player1, powerupid);
+                   Powerup(player1, powerupid);
 
-                else if (powerupPlayer1.Count < 4 && checkEffect(powerupid) == 1)
+                if (powerupPlayer1.Count < 4 && checkEffect(powerupid) == 1)
                 {
-                    powerupPlayer1.Add(powerupid);
+                    powerupPlayer1.Add(powerupid+1);
                     powerup1++;
                 } 
 
@@ -294,12 +294,12 @@ public class PowerUp : MonoBehaviour
             {
 
                 SetPositionAndSpeedPause();
-                if (checkEffect(powerupid) == -1) {
-                    Powerup(player2, powerupid);
-                }
-                else if (powerupPlayer2.Count < 4 && checkEffect(powerupid)==1)
+                if (checkEffect(powerupid) == -1) 
+                   Powerup(player2, powerupid);
+                
+                if (powerupPlayer2.Count < 4 && checkEffect(powerupid)==1)
                 {
-                    powerupPlayer2.Add(powerupid);
+                    powerupPlayer2.Add(powerupid+1);
                     powerup2++;
                 }
 
@@ -310,9 +310,8 @@ public class PowerUp : MonoBehaviour
     void Powerup(PlayerBehaviour player, int id){
         
         if (player.name == "Player 1")
-        {
             player = player1;
-        }
+        
         else if (player.name == "Player 2")
             player = player2;
 
