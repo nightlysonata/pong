@@ -88,23 +88,15 @@ public class Controller : MonoBehaviour
                 string[] elements = recievedData.Split(' ');
                 recievedData1 = GameData.Instance.streams[1].ReadLine();
                 string[] elements1 = recievedData1.Split(' ');
-                player1Y = System.Convert.ToInt32(elements[2], 16);
                 player1X = System.Convert.ToInt32(elements[1], 16);
 
-                player2Y = System.Convert.ToInt32(elements1[2], 16);
                 player2X = System.Convert.ToInt32(elements1[1], 16);
 
                 if (player1X > 127)
                     player1X = player1X - 256;
-                if (player1Y > 127)
-                    player1Y = player1Y - 256;
-                player1Y += 127;
 
                 if (player2X > 127)
                     player2X = player2X - 256;
-                if (player2Y > 127)
-                    player2Y = player2Y - 256;
-                player2Y += 127;
 
                 player1Slider = ((float)(player1X) / 64.0f);
                 player2Slider = ((float)(player2X) / 64.0f);
