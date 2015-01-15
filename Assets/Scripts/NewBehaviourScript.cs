@@ -34,6 +34,18 @@ public class NewBehaviourScript : MonoBehaviour
     float procentualy = 0f;
     float procentualx = 0f;
 
+    public GUIStyle modified = new GUIStyle();
+    public GUIStyle anweisung = new GUIStyle();
+    public GUIStyle line = new GUIStyle();
+    public GUIStyle nopowerups = new GUIStyle();
+    public GUIStyle background = new GUIStyle();
+    public GUIStyle powerups = new GUIStyle();
+    public GUIStyle powerup1 = new GUIStyle();
+    public GUIStyle powerup2 = new GUIStyle();
+    public GUIStyle powerup3 = new GUIStyle();
+    public GUIStyle powerup4 = new GUIStyle();
+    public GUIStyle powerup5 = new GUIStyle();
+
     // ______________________________________________________________________________________________________________________________
 
     // Initialisiere den Ball an der Ausgangslage und setze Velocity in die Spielrichtung
@@ -66,6 +78,10 @@ public class NewBehaviourScript : MonoBehaviour
     // Prüfe in jedem Update() ob eine Kollision mit den Grenzen des Spielfelds vorliegt
     void Update()
     {
+        modified.fontSize = Screen.height / 7;
+        anweisung.fontSize = Screen.height / 20;
+        line.fontSize = Screen.height / 50;
+
         //Debug.Log(GameData.Instance.buttonVal + " - " + GameData.Instance.SW2);
         if (GameData.Instance.powerup1 && GameData.Instance.player1)
         {
@@ -207,27 +223,57 @@ public class NewBehaviourScript : MonoBehaviour
     // gibt die Score der Spieler aus und "malt" das Spielfeld
     void OnGUI()
     {
-        GUI.Label(new Rect(10, 50, 220, 30), "Spieler 1: " + playerScore[0]);
-        GUI.Label(new Rect(10, 70, 220, 30), "Spieler 2: " + playerScore[1]);
+        GUI.Label(new Rect(Screen.width / 2 - Screen.width / 5, Screen.height / 2 - 3 * Screen.height / 15, Screen.width / 7, Screen.height / 12.5f), playerScore[0].ToString(), modified);
+        GUI.Label(new Rect(Screen.width / 2 + 0.3f * Screen.width / 5, Screen.height / 2 - 3 * Screen.height / 15, Screen.width / 7, Screen.height / 12.5f), playerScore[1].ToString(), modified);
         GUI.Label(new Rect(10, 150, 220, 30), "bla " + rigidbody.velocity.x + " " + rigidbody.velocity.y + " " + rigidbody.velocity.z);
 
         if (!GameData.Instance.pause && !startbool)
         {
             for (int i = 0; i < Screen.height; i = i + 10)
             {
-                GUI.Label(new Rect(Screen.width / 2, i, 10, 15), "|");
+                GUI.Label(new Rect(Screen.width / 2, i, 10, 15), "|", line);
             }
         }
         if (startbool)
         {
             if (GameData.Instance.toolbarInt == 0)
-                GUI.Label(new Rect(Screen.width / 2 - 55, Screen.height / 3, 220, 30), "Drücke o zum starten");
+                GUI.Label(new Rect(Screen.width / 2 - Screen.width / 14, Screen.height / 3, Screen.width / 7, Screen.height / 12.5f), "Druecke o zum starten", anweisung);
             else
-                GUI.Label(new Rect(Screen.width / 2 - 55, Screen.height / 3, 220, 40), "Drücke o zum starten\noder SW1 auf dem Kontroller");
+                GUI.Label(new Rect(Screen.width / 2 - Screen.width / 14, Screen.height / 3, Screen.width / 7, Screen.height / 12.5f), "Druecke o zum starten\noder SW1 auf dem Controller", anweisung);
         }
-        if (GameData.Instance.pause)
+        if (GameData.Instance.gamemode != 1)
         {
-            GUI.Label(new Rect(Screen.width / 2 - 20, Screen.height / 3, 220, 30), "Pause");
+            GUI.Label(new Rect(Screen.width / 2 - 12.25f * Screen.width / 30, Screen.height / 2 + 5 * Screen.height / 15, Screen.width / 22, Screen.width / 22), "", nopowerups);
+            GUI.Label(new Rect(Screen.width / 2 - 10.75f * Screen.width / 30, Screen.height / 2 + 5 * Screen.height / 15, Screen.width / 22, Screen.width / 22), "", nopowerups);
+            GUI.Label(new Rect(Screen.width / 2 - 9.25f * Screen.width / 30, Screen.height / 2 + 5 * Screen.height / 15, Screen.width / 22, Screen.width / 22), "", nopowerups);
+            GUI.Label(new Rect(Screen.width / 2 - 7.75f * Screen.width / 30, Screen.height / 2 + 5 * Screen.height / 15, Screen.width / 22, Screen.width / 22), "", nopowerups);
+
+            GUI.Label(new Rect(Screen.width / 2 + 11 * Screen.width / 30, Screen.height / 2 + 5 * Screen.height / 15, Screen.width / 22, Screen.width / 22), "", nopowerups);
+            GUI.Label(new Rect(Screen.width / 2 + 9.5f * Screen.width / 30, Screen.height / 2 + 5 * Screen.height / 15, Screen.width / 22, Screen.width / 22), "", nopowerups);
+            GUI.Label(new Rect(Screen.width / 2 + 8 * Screen.width / 30, Screen.height / 2 + 5 * Screen.height / 15, Screen.width / 22, Screen.width / 22), "", nopowerups);
+            GUI.Label(new Rect(Screen.width / 2 + 6.5f * Screen.width / 30, Screen.height / 2 + 5 * Screen.height / 15, Screen.width / 22, Screen.width / 22), "", nopowerups);
+        }
+        if (GameData.Instance.pause && GameData.Instance.gamemode != 2)
+        {
+            GUI.Label(new Rect(0, 0, Screen.width, Screen.height), "", background);
+            GUI.Label(new Rect(Screen.width / 2 - Screen.width / 14, Screen.height / 12, Screen.width / 7, Screen.height / 12.5f), "Pause", anweisung);
+            GUI.Label(new Rect(Screen.width / 2 + Screen.width / 14, Screen.height / 11f, Screen.width / 7, Screen.height / 12.5f), "Druecke P um weiterzuspielen", powerups); 
+            GUI.Label(new Rect(Screen.width / 2 - 6.5f * Screen.width / 30, Screen.height / 2 - 4 * Screen.height / 15, Screen.width / 22, Screen.width / 22), "", powerup1);
+            GUI.Label(new Rect(Screen.width / 2 - 6.5f * Screen.width / 30, Screen.height / 2 - 2 * Screen.height / 15, Screen.width / 22, Screen.width / 22), "", powerup2);
+            GUI.Label(new Rect(Screen.width / 2 - 6.5f * Screen.width / 30, Screen.height / 2 - 0 * Screen.height / 15, Screen.width / 22, Screen.width / 22), "", powerup3);
+            GUI.Label(new Rect(Screen.width / 2 - 6.5f * Screen.width / 30, Screen.height / 2 + 2 * Screen.height / 15, Screen.width / 22, Screen.width / 22), "", powerup4);
+            GUI.Label(new Rect(Screen.width / 2 - 6.5f * Screen.width / 30, Screen.height / 2 + 4 * Screen.height / 15, Screen.width / 22, Screen.width / 22), "", powerup5);
+            
+            GUI.Label(new Rect(Screen.width / 2 - 3f * Screen.width / 30, Screen.height / 2 - 4 * Screen.height / 15, Screen.width / 3, Screen.width / 22), "jfksalögdksaljfdklösagnldjskbgjföab kjdsnafjdkslajfkldösacmldsa", powerups);
+            GUI.Label(new Rect(Screen.width / 2 - 3f * Screen.width / 30, Screen.height / 2 - 2 * Screen.height / 15, Screen.width / 3, Screen.width / 22), "jfksalögdksaljfdklösagnldjskbgjföab kjdsnafjdkslajfkldösacmldsa", powerups);
+            GUI.Label(new Rect(Screen.width / 2 - 3f * Screen.width / 30, Screen.height / 2 - 0 * Screen.height / 15, Screen.width / 3, Screen.width / 22), "jfksalögdksaljfdklösagnldjskbgjföab kjdsnafjdkslajfkldösacmldsa", powerups);
+            GUI.Label(new Rect(Screen.width / 2 - 3f * Screen.width / 30, Screen.height / 2 + 2 * Screen.height / 15, Screen.width / 3, Screen.width / 22), "jfksalögdksaljfdklösagnldjskbgjföab kjdsnafjdkslajfkldösacmldsa", powerups);
+            GUI.Label(new Rect(Screen.width / 2 - 3f * Screen.width / 30, Screen.height / 2 + 4 * Screen.height / 15, Screen.width / 3, Screen.width / 22), "jfksalögdksaljfdklösagnldjskbgjföab kjdsnafjdkslajfkldösacmldsa", powerups);
+        }
+
+        if (GameData.Instance.pause && GameData.Instance.gamemode == 1)
+        {
+            GUI.Label(new Rect(Screen.width / 2 - Screen.width / 14, Screen.height / 3, Screen.width / 7, Screen.height / 12.5f), "Pause", anweisung);
         }
     }
 }

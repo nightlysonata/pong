@@ -50,7 +50,10 @@ public class GameData
     public int buttonVal1;
     public int lastButton;
 
+    public GUIStyle modified = new GUIStyle();
+    public GUIStyle buttons = new GUIStyle();
 
+    public int gamemode;
     // ______________________________________________________________________________________________________________________________
 
     private GameData()
@@ -78,6 +81,7 @@ public class GameData
         buttonVal1 = 0;
         lastButton = -1;
         extreme = false;
+        gamemode = 0;
     }
 
     // ______________________________________________________________________________________________________________________________
