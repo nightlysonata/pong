@@ -44,7 +44,7 @@ public class PowerUp : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        renderer.material.color = Color.green;
+        
         SetPositionAndSpeed();
         pause = true;
         for (int i = 0; i < powerups.Length; i++)
@@ -351,25 +351,33 @@ public class PowerUp : MonoBehaviour
     #region Powerup invisible Ball
 
     IEnumerator invisibleBall(GameObject player) {
-
+        
         if (player == Player1) {
 
             if (ball.transform.position.x >= 0)
-                while (ball.transform.position.x >= 0) ;
-            
-            while (ball.transform.position.x <= 0)
-                ball.renderer.enabled = false;
+                while (ball.transform.position.x >= 0) 
+                    yield return new WaitForEndOfFrame();
 
+            
+            while (ball.transform.position.x <= 0 && ball.transform.position.x > -160.0f){
+                ball.renderer.enabled = false;
+                yield return new WaitForEndOfFrame();
+            }
             ball.renderer.enabled = true;
         }
 
         if (player == Player2) {
 
-            if (ball.transform.position.x <= 0) 
-                while (ball.transform.position.x <= 0) ;
-            
-            while (ball.transform.position.x >= 0) 
+            if (ball.transform.position.x <= 0)
+                while (ball.transform.position.x <= 0)
+                    yield return new WaitForEndOfFrame();
+
+
+            while (ball.transform.position.x >= 0 && ball.transform.position.x < 160.0f)
+            {
                 ball.renderer.enabled = false;
+                yield return new WaitForEndOfFrame();
+            }
             
             ball.renderer.enabled = true;
         }
@@ -385,14 +393,16 @@ public class PowerUp : MonoBehaviour
         if (player == Player1) {
 
             if (ball.transform.position.x > 0)
-                while (ball.transform.position.x > 0) ;
+                while (ball.transform.position.x > 0)
+                    yield return new WaitForEndOfFrame();
 
             ball.rigidbody.velocity = new Vector3(rigidbody.velocity.x, rigidbody.velocity.y * (-1), rigidbody.velocity.z);
         }
         if (player == Player2) { 
             
             if(ball.transform.position.x < 0)
-                while (ball.transform.position.x < 0);
+                while (ball.transform.position.x < 0)
+                    yield return new WaitForEndOfFrame();
 
             ball.rigidbody.velocity = new Vector3(rigidbody.velocity.x, rigidbody.velocity.y *(-1), rigidbody.velocity.z);
         }
@@ -415,9 +425,15 @@ public class PowerUp : MonoBehaviour
     {
         
             yield return new WaitForSeconds(1);
-            powerupID = Random.Range(0, 10);
-            Debug.Log(powerupID);
+            //powerupID = Random.Range(0, 10);
+            powerupID = 3;
+            //Debug.Log(powerupID);
             //y = Random.Range(-90f, 90f);
+            if (powerupID < 5)
+                renderer.material.color = Color.red;
+            else
+                renderer.material.color = Color.green;
+
             transform.position = new Vector3(0, 0, 0);
 
             if (pause)
