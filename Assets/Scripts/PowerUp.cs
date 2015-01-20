@@ -433,19 +433,21 @@ public class PowerUp : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            if (other.name == "Player 1"){
+            if (other.name == "Player 1")
+            {
 
                 SetPositionAndSpeedPause();
 
                 //if negative pwup activate instantly
-                if (powerupID < 5) 
+                if (powerupID < 5)
                     powerup(Player1, powerupID);
                 //else save
                 if (powerupsP1.Count < 4 && powerupID > 4)
-                    powerupsP1.Add(powerupID);            
+                    powerupsP1.Add(powerupID);
             }
             //same for player 2
-        } else if (other.name == "Player 2"){
+            else if (other.name == "Player 2")
+            {
 
                 SetPositionAndSpeedPause();
 
@@ -454,6 +456,7 @@ public class PowerUp : MonoBehaviour
 
                 if (powerupsP2.Count < 4 && powerupID > 4)
                     powerupsP2.Add(powerupID);
+            }
         }
 
         //if (other.tag == "Ball"){
