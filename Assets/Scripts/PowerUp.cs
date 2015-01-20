@@ -200,7 +200,7 @@ public class PowerUp : MonoBehaviour
 
         if (powerupsP1.Count == 4 && powerupsP2.Count == 4)
         {
-            transform.position = new Vector3(0, 300, 0);
+            transform.position = new Vector3(300, 300, 0);
             return;
         }
         else
@@ -208,11 +208,11 @@ public class PowerUp : MonoBehaviour
             pause = false;
         }
 
-        if (Mathf.Abs(transform.position.x) > 180f && !pause)
+        if (Mathf.Abs(transform.position.x) > 200f && !pause)
         {
             SetPositionAndSpeedPause();
         }
-        if (!pause && !start)
+       if (!pause) // if (!pause && !start)
         {
             if (speeda < 0)
             {
@@ -231,7 +231,7 @@ public class PowerUp : MonoBehaviour
 
     void SetPositionAndSpeedPause()
     {
-        transform.position = new Vector3(0, 300, 0);
+        transform.position = new Vector3(300, 300, 0);
         SetPositionAndSpeed();
         pause = true;
     }
@@ -314,11 +314,16 @@ public class PowerUp : MonoBehaviour
     IEnumerator spawntime()
     {
         
-            yield return new WaitForSeconds(10);
-            int id = Random.Range(0, 10);
-            Debug.Log(id);
-            y = Random.Range(-90f, 90f);
-            transform.position = new Vector3(0, y, 0);
+            yield return new WaitForSeconds(1);
+            powerupID = Random.Range(0, 10);
+            Debug.Log(powerupID);
+            //y = Random.Range(-90f, 90f);
+            transform.position = new Vector3(0, 0, 0);
+
+            if (pause)
+                speeda = Random.Range(-1.0f, 1.0f);
+
+            pause = false;
         
     }
 
