@@ -239,11 +239,11 @@ public class PowerUp : MonoBehaviour
     // ______________________________________________________________________________________________________________________________
 
     void powerup(GameObject player, int id) {
-
+        GameObject opponent = null;
         if (player.name == "Player 1")
-            player = Player1;
+            opponent = Player2;
         else if (player.name == "Player 2")
-            player = Player2;
+            opponent = Player1;
 
         //0-4 negative powerups
         //5-9 positive powerups
@@ -264,28 +264,28 @@ public class PowerUp : MonoBehaviour
                 StartCoroutine(invisibleBall(player));
                 break;
 
-            case 4: //ball changes directions at centerline
-                StartCoroutine(changeBalldirection(player));
+            case 4: //opponent bat gets bigger
+                StartCoroutine(posscale(opponent));
                 break;
 
             case 5: // shrink opponent bat
-                StartCoroutine(negscale(player));
+                StartCoroutine(negscale(opponent));
                 break;
 
             case 6: // bring opponen bat closer to middle line
-                StartCoroutine(middle(player));
+                StartCoroutine(middle(opponent));
                 break;
 
             case 7: // make opponent invisible for 3 seconds
-                StartCoroutine(invisible(player));
+                StartCoroutine(invisible(opponent));
                 break;
 
             case 8: //make ball on opponent side invisible for 1 round
-                StartCoroutine(invisibleBall(player));
+                StartCoroutine(invisibleBall(opponent));
                 break;
 
-            case 9: //ball changes direction at centerline
-                StartCoroutine(changeBalldirection(player));
+            case 9: //bat gets bigger
+                StartCoroutine(posscale(player));
                 break;
             default:
                 break;
@@ -387,24 +387,40 @@ public class PowerUp : MonoBehaviour
 
     #endregion
 
-    #region Powerup Change Balldirection
+    #region Powerup faster ball
 
-    IEnumerator changeBalldirection(GameObject player) {
-        if (player == Player1) {
-
-            if (ball.transform.position.x > 0)
-                while (ball.transform.position.x > 0)
+    IEnumerator changeBallSpeed(GameObject player) {
+        
+        if (player == Player1)
+        {
+            while (ball.rigidbody.velocity.x < 0 || ball.transform.position.x > -1 )
                     yield return new WaitForEndOfFrame();
 
-            ball.rigidbody.velocity = new Vector3(rigidbody.velocity.x, rigidbody.velocity.y * (-1), rigidbody.velocity.z);
+            float ballspeed = ball.rigidbody.velocity.x + 50.0f;
+            while (ball.transform.position.x <= 0 && ball.transform.position.x > -160.0f)
+            {
+                ball.rigidbody.velocity = new Vector3(ballspeed, ball.rigidbody.velocity.y, ball.rigidbody.velocity.z);
+                yield return new WaitForEndOfFrame();
+            }
+            ball.rigidbody.velocity = new Vector3(ball.rigidbody.velocity.x - 50.0f, ball.rigidbody.velocity.y, ball.rigidbody.velocity.z);
         }
-        if (player == Player2) { 
-            
-            if(ball.transform.position.x < 0)
-                while (ball.transform.position.x < 0)
+
+        if (player == Player2)
+        {
+
+
+            while (ball.rigidbody.velocity.x > 0 || ball.transform.position.x < 1)
                     yield return new WaitForEndOfFrame();
 
-            ball.rigidbody.velocity = new Vector3(rigidbody.velocity.x, rigidbody.velocity.y *(-1), rigidbody.velocity.z);
+            float ballspeed = ball.rigidbody.velocity.x + 50.0f;
+            while (ball.transform.position.x >= 0 && ball.transform.position.x < 160.0f)
+            {
+
+                ball.rigidbody.velocity = new Vector3(ballspeed, ball.rigidbody.velocity.y, ball.rigidbody.velocity.z);
+                yield return new WaitForEndOfFrame();
+            }
+
+            ball.rigidbody.velocity = new Vector3(ball.rigidbody.velocity.x - 50.0f, ball.rigidbody.velocity.y, ball.rigidbody.velocity.z);
         }
 
         yield return null;
@@ -425,8 +441,8 @@ public class PowerUp : MonoBehaviour
     {
         
             yield return new WaitForSeconds(1);
-            //powerupID = Random.Range(0, 10);
-            powerupID = 3;
+            powerupID = Random.Range(0, 10);
+
             //Debug.Log(powerupID);
             //y = Random.Range(-90f, 90f);
             if (powerupID < 5)

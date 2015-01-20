@@ -11,7 +11,7 @@ public class NewBehaviourScript : MonoBehaviour
     // Größe des Spielfelds
     public float ySize = 125.0f;
     public float xSize = 200.0f;
-
+  
     // PlayerScore
     public int[] playerScore = new int[2];
 
@@ -123,6 +123,7 @@ public class NewBehaviourScript : MonoBehaviour
     // Verhalten des Balls bei Kollision mit der oberen und unteren SpielfeldKante oder mit den Spielern
     void OnTriggerEnter(Collider collider)
     {
+        
         if (collider.tag == "Border")
         {
             // negiere y für Eingangswinkel = Ausfallswinkel an den oberen und unteren Grenzen
@@ -167,6 +168,8 @@ public class NewBehaviourScript : MonoBehaviour
                 bounce = 0;
             }
         }
+
+        
     }
 
     // ______________________________________________________________________________________________________________________________
