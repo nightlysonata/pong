@@ -58,6 +58,12 @@ public class PowerUp : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if (transform.position.x < 10  && transform.position.x > -10)
+            renderer.enabled = false;
+        else
+            renderer.enabled = true;
+
         #region powerup activation player1 keyboard
         if (Input.GetKeyDown(KeyCode.Alpha1) && powerupsP1.Count > 0)
         {
@@ -225,6 +231,9 @@ public class PowerUp : MonoBehaviour
                 transform.Translate(Vector3.right * amtToMove);
             }
         }
+
+       
+       
     }
 
     // ______________________________________________________________________________________________________________________________
@@ -437,26 +446,28 @@ public class PowerUp : MonoBehaviour
 
     // ______________________________________________________________________________________________________________________________
 
+    float randomY() {
+
+        return Random.Range(-90.0f, 90.0f);
+    }
     IEnumerator spawntime()
     {
-        
             yield return new WaitForSeconds(1);
             powerupID = Random.Range(0, 10);
 
-            //Debug.Log(powerupID);
-            //y = Random.Range(-90f, 90f);
             if (powerupID < 5)
                 renderer.material.color = Color.red;
             else
                 renderer.material.color = Color.green;
 
-            transform.position = new Vector3(0, 0, 0);
+            transform.position = new Vector3(0, randomY(), 0);
 
             if (pause)
                 speeda = Random.Range(-1.0f, 1.0f);
 
             pause = false;
-        
+           
+          
     }
 
     // ______________________________________________________________________________________________________________________________
