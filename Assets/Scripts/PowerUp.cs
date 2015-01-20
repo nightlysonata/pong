@@ -32,19 +32,19 @@ public class PowerUp : MonoBehaviour
     private bool middlel1;
     private bool middlel2;
 
-    private bool start = true;
+    //private bool start = true; not used
 
     public GameObject Player1;
     public GameObject Player2;
 
-    public PlayerBehaviour player1script;
-    public PlayerBehaviour player2script;
+    public GameObject ball;
 
     // ______________________________________________________________________________________________________________________________
 
     // Use this for initialization
     void Start()
     {
+        renderer.material.color = Color.green;
         SetPositionAndSpeed();
         pause = true;
         for (int i = 0; i < powerups.Length; i++)
@@ -251,8 +251,41 @@ public class PowerUp : MonoBehaviour
             case 0: //shrink player bat
                 StartCoroutine(negscale(player));
                 break;
+
+            case 1: //bring player closer to the middle line
+                StartCoroutine(middle(player));
+                break;
+
+            case 2: //make player invisible for 3 seconds
+                StartCoroutine(invisible(player));
+                break;
+
+            case 3: //make ball on own side invisible for 1 round
+                StartCoroutine(invisibleBall(player));
+                break;
+
+            case 4: //ball changes directions at centerline
+                StartCoroutine(changeBalldirection(player));
+                break;
+
             case 5: // shrink opponent bat
                 StartCoroutine(negscale(player));
+                break;
+
+            case 6: // bring opponen bat closer to middle line
+                StartCoroutine(middle(player));
+                break;
+
+            case 7: // make opponent invisible for 3 seconds
+                StartCoroutine(invisible(player));
+                break;
+
+            case 8: //make ball on opponent side invisible for 1 round
+                StartCoroutine(invisibleBall(player));
+                break;
+
+            case 9: //ball changes direction at centerline
+                StartCoroutine(changeBalldirection(player));
                 break;
             default:
                 break;
@@ -297,9 +330,76 @@ public class PowerUp : MonoBehaviour
         player.transform.position -= new Vector3(first.x * 0.1f, 0, 0);
         middlel2 = true;
         yield return new WaitForSeconds(10.0f);
-        player.transform.position = new Vector3(player.transform.position.x * 1.10f, Player2.transform.position.y, 0);
+        player.transform.position = new Vector3(player.transform.position.x * 1.10f, player.transform.position.y, 0);
         middlel2 = false;
     }
+    #endregion
+
+    #region Powerup Invisible Player
+
+    IEnumerator invisible(GameObject player) {
+
+        player.renderer.enabled = false;
+
+        yield return new WaitForSeconds(3);
+
+        player.renderer.enabled = true;
+    }
+
+    #endregion
+
+    #region Powerup invisible Ball
+
+    IEnumerator invisibleBall(GameObject player) {
+
+        if (player == Player1) {
+
+            if (ball.transform.position.x >= 0)
+                while (ball.transform.position.x >= 0) ;
+            
+            while (ball.transform.position.x <= 0)
+                ball.renderer.enabled = false;
+
+            ball.renderer.enabled = true;
+        }
+
+        if (player == Player2) {
+
+            if (ball.transform.position.x <= 0) 
+                while (ball.transform.position.x <= 0) ;
+            
+            while (ball.transform.position.x >= 0) 
+                ball.renderer.enabled = false;
+            
+            ball.renderer.enabled = true;
+        }
+
+        yield return null;
+    }
+
+    #endregion
+
+    #region Powerup Change Balldirection
+
+    IEnumerator changeBalldirection(GameObject player) {
+        if (player == Player1) {
+
+            if (ball.transform.position.x > 0)
+                while (ball.transform.position.x > 0) ;
+
+            ball.rigidbody.velocity = new Vector3(rigidbody.velocity.x, rigidbody.velocity.y * (-1), rigidbody.velocity.z);
+        }
+        if (player == Player2) { 
+            
+            if(ball.transform.position.x < 0)
+                while (ball.transform.position.x < 0);
+
+            ball.rigidbody.velocity = new Vector3(rigidbody.velocity.x, rigidbody.velocity.y *(-1), rigidbody.velocity.z);
+        }
+
+        yield return null;
+    }
+
     #endregion
 
     // ______________________________________________________________________________________________________________________________
