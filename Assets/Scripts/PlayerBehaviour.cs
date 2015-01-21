@@ -12,6 +12,7 @@ public class PlayerBehaviour : MonoBehaviour
     // Stored as public members, so we can modify them in the unity editor for the individual players
 
     // Speed of the player
+    #region
     float yRange = 80f;
     float smooth = 3.0f;
 
@@ -28,12 +29,12 @@ public class PlayerBehaviour : MonoBehaviour
     float[] smoothArray;
 
     float oldRange;
+    #endregion
     // ______________________________________________________________________________________________________________________________
 
     // Use this for initialization
     void Start()
     {
-        smoothArray = new float[smoothGrenze];
         oldRange = 0.0f;
     }
 
@@ -45,14 +46,14 @@ public class PlayerBehaviour : MonoBehaviour
         #region Pausierung des Spiels
         if ((GameData.Instance.buttonVal & GameData.Instance.SW2) == 0 && (GameData.Instance.buttonVal1 & GameData.Instance.SW2) == 0)
         {
-            GameData.Instance.lastButton = -1;
+            GameData.Instance.lastButton = -1; ;
         }
         //else if (((GameData.Instance.buttonVal & GameData.Instance.SW2) != 0 && GameData.Instance.lastButton != 1) || ((GameData.Instance.buttonVal1 & GameData.Instance.SW2) != 0
-            //&& GameData.Instance.lastButton != 1))
+        //&& GameData.Instance.lastButton != 1))
         //{
 
 
-            //Hier wird die Pausierung ausgeführt!!!
+        //Hier wird die Pausierung ausgeführt!!!
         //}
         if (!paused)
         {
@@ -100,36 +101,14 @@ public class PlayerBehaviour : MonoBehaviour
                 if (GameData.Instance.extreme)
                 {
                     playerY1.y = yRange * GameData.Instance.Y1 * 1.2f;
-
-                    #region smoothProzess
-                    if (smoother != smoothGrenze)
-                    {
-                        smoothArray[smoother] = playerY1.y;
-                        smoother++;
-                        Debug.Log(smoother);
-                    }
-                    float tempi = 0;
-                    if (smoother == smoothGrenze)
-                    {
-                        for (int i = 0; i < smoother; i++)
-                        {
-                            tempi += smoothArray[i];
-                        }
-                        playerY1.y = tempi / (smoother);
-                        transform.position = playerY1;
-                        smoother = 0;
-                    }
-                    #endregion
-
-
-                    transform.position = new Vector3(transform.position.x, Mathf.Lerp(oldRange, playerY1.y, smooth), transform.position.z);
-                    oldRange = playerY1.y;
                 }
                 else
                 {
                     playerY1.y = yRange * GameData.Instance.Y1;
-                    transform.position = playerY1;
+
                 }
+                transform.position = playerY1;
+
                 //Unterschiede zwischen Drehregler und Accelerometer ausgleichen
                 float tiltAroundZ;
                 if (GameData.Instance.extreme)

@@ -22,10 +22,10 @@ public class Controller : MonoBehaviour
     #region Initialisierung
     SerialPort stream;
     SerialPort stream1;
-    string receivedData = "EMPTY";
-    string receivedData1 = "EMPTY";
-    string[] received;
-    string[] received1;
+    string recievedData = "EMPTY";
+    string recievedData1 = "EMPTY";
+    string[] recieved;
+    string[] recieved1;
     public bool[] open = new bool[9];
 
     public GameObject player1;
@@ -43,7 +43,17 @@ public class Controller : MonoBehaviour
 
     bool jump1 = false;
 
-    public float smooth = 2.0F;
+    private float smoothing = 0.005f;
+
+    #region smoothstuff
+    public float player1Slider = -1.0f;
+    private float player1SliderLastUsedValue = -1.0f;
+    private CircularBuffer<float> player1Buffer = new CircularBuffer<float>(10);
+    public float player2Slider = -1.0f;
+    private float player2SliderLastUsedValue = -1.0f;
+    private CircularBuffer<float> player2Buffer = new CircularBuffer<float>(10);
+    #endregion
+
 
     #endregion
     // ______________________________________________________________________________________________________________________________
@@ -58,6 +68,56 @@ public class Controller : MonoBehaviour
     void Start()
     {
         GameData.Instance.openstreams();
+        #region Für Smoothing Anfangswerte einlesen
+        if (GameData.Instance.toolbarInt == 1)
+        {
+            GameData.Instance.streams[0].Write("4");
+            recievedData = GameData.Instance.streams[0].ReadLine();
+            recieved = recievedData.Split(' ');
+
+            player1Slider = System.Convert.ToInt32(recieved[3], 16) / (float)128.0f;
+            player2Slider = System.Convert.ToInt32(recieved[4], 16) / (float)128.0f;
+        }
+        if (GameData.Instance.toolbarInt == 2)
+        {
+            if (GameData.Instance.extreme)
+            {
+                GameData.Instance.streams[0].Write("a");
+                GameData.Instance.streams[1].Write("a");
+                recievedData = GameData.Instance.streams[0].ReadLine();
+                string[] elements = recievedData.Split(' ');
+                recievedData1 = GameData.Instance.streams[1].ReadLine();
+                string[] elements1 = recievedData1.Split(' ');
+                player1X = System.Convert.ToInt32(elements[1], 16);
+
+                player2X = System.Convert.ToInt32(elements1[1], 16);
+
+                if (player1X > 127)
+                    player1X = player1X - 256;
+
+                if (player2X > 127)
+                    player2X = player2X - 256;
+
+                player1Slider = ((float)(player1X) / 64.0f);
+                player2Slider = ((float)(player2X) / 64.0f);
+            }
+            else
+            {
+                GameData.Instance.streams[0].Write("4");
+                GameData.Instance.streams[1].Write("4");
+                recievedData = GameData.Instance.streams[0].ReadLine();
+                recieved = recievedData.Split(' ');
+                recievedData1 = GameData.Instance.streams[1].ReadLine();
+                recieved1 = recievedData1.Split(' ');
+
+                player1Slider = System.Convert.ToInt32(recieved[3], 16) / (float)128.0f;
+                player2Slider = System.Convert.ToInt32(recieved1[3], 16) / (float)128.0f;
+                Debug.Log(player2Slider + ", " + player1Slider);
+
+            }
+
+        }
+        #endregion
     }
     // ______________________________________________________________________________________________________________________________
 
@@ -69,8 +129,8 @@ public class Controller : MonoBehaviour
         if (GameData.Instance.toolbarInt == 1)
         {
             GameData.Instance.streams[0].Write("1");
-            receivedData = GameData.Instance.streams[0].ReadLine();
-            GameData.Instance.buttonVal = System.Convert.ToInt32(receivedData, 16);
+            recievedData = GameData.Instance.streams[0].ReadLine();
+            GameData.Instance.buttonVal = System.Convert.ToInt32(recievedData, 16);
         }
         #endregion
 
@@ -78,11 +138,11 @@ public class Controller : MonoBehaviour
         if (GameData.Instance.toolbarInt == 2)
         {
             GameData.Instance.streams[0].Write("1");
-            receivedData = GameData.Instance.streams[0].ReadLine();
-            GameData.Instance.buttonVal = System.Convert.ToInt32(receivedData, 16);
+            recievedData = GameData.Instance.streams[0].ReadLine();
+            GameData.Instance.buttonVal = System.Convert.ToInt32(recievedData, 16);
             GameData.Instance.streams[1].Write("1");
-            receivedData = GameData.Instance.streams[1].ReadLine();
-            GameData.Instance.buttonVal1 = System.Convert.ToInt32(receivedData, 16);
+            recievedData = GameData.Instance.streams[1].ReadLine();
+            GameData.Instance.buttonVal1 = System.Convert.ToInt32(recievedData, 16);
         }
         #endregion
 
@@ -110,23 +170,57 @@ public class Controller : MonoBehaviour
         if (GameData.Instance.toolbarInt == 1)
         {
             GameData.Instance.streams[0].Write("4");
-            receivedData = GameData.Instance.streams[0].ReadLine();
-            received = receivedData.Split(' ');
+            recievedData = GameData.Instance.streams[0].ReadLine();
+            recieved = recievedData.Split(' ');
 
-            Axis1 = System.Convert.ToInt32(received[1], 16);
-            Axis2 = System.Convert.ToInt32(received[2], 16);
-            Debug.Log(Axis1 + ", " + Axis2);
+            Axis1 = System.Convert.ToInt32(recieved[1], 16);
+            Axis2 = System.Convert.ToInt32(recieved[2], 16);
+
             GameData.Instance.Axis1 = Axis1;
             GameData.Instance.Axis2 = Axis2;
 
-            received[3] = received[3].Remove(3);
-            received[4] = received[4].Remove(3);
+            recieved[3] = recieved[3].Remove(3);
+            recieved[4] = recieved[4].Remove(3);
 
-            Y1 = System.Convert.ToInt32(received[3], 16);
-            Y2 = System.Convert.ToInt32(received[4], 16);
+            Y1 = System.Convert.ToInt32(recieved[3], 16);
+            Y2 = System.Convert.ToInt32(recieved[4], 16);
 
             player1Y = ((float)(Y1) / 128.0f) - 1.0f;
             player2Y = ((float)(Y2) / 128.0f) - 1.0f;
+
+
+            player1Buffer.Add(player1Y);
+            player2Buffer.Add(player2Y);
+
+            //calculate new position
+            float player1Sum = 0.0f;
+            float player2Sum = 0.0f;
+            for (int i = 0; i < player1Buffer.Count; i++)
+            {
+                player2Sum += player2Buffer.getValue(i);
+                player1Sum += player1Buffer.getValue(i);
+            }
+            player1Slider = player1Sum / player1Buffer.Count;
+            player2Slider = player2Sum / player2Buffer.Count;
+
+            if (isInSmoothingArea(player1Slider, player1SliderLastUsedValue))
+            {
+                player1SliderLastUsedValue = player1Slider;
+            }
+            else
+            {
+                player1Slider = player1SliderLastUsedValue;
+            }
+
+            if (isInSmoothingArea(player2Slider, player2SliderLastUsedValue))
+            {
+                player2SliderLastUsedValue = player2Slider;
+            }
+            else
+            {
+                player2Slider = player2SliderLastUsedValue;
+            }
+
 
             #region Springen des rechten Spielers am oberen Rand unterbinden
             if (player1Y == 0.9921875f)
@@ -144,8 +238,9 @@ public class Controller : MonoBehaviour
             }
             #endregion
 
-            GameData.Instance.Y1 = player1Y;
-            GameData.Instance.Y2 = player2Y;
+
+            GameData.Instance.Y1 = player1Slider;
+            GameData.Instance.Y2 = player2Slider;
         }
         #endregion
 
@@ -157,10 +252,10 @@ public class Controller : MonoBehaviour
             {
                 GameData.Instance.streams[0].Write("a");
                 GameData.Instance.streams[1].Write("a");
-                receivedData = GameData.Instance.streams[0].ReadLine();
-                string[] elements = receivedData.Split(' ');
-                receivedData1 = GameData.Instance.streams[1].ReadLine();
-                string[] elements1 = receivedData1.Split(' ');
+                recievedData = GameData.Instance.streams[0].ReadLine();
+                string[] elements = recievedData.Split(' ');
+                recievedData1 = GameData.Instance.streams[1].ReadLine();
+                string[] elements1 = recievedData1.Split(' ');
                 player1Y = System.Convert.ToInt32(elements[2], 16);
                 player1X = System.Convert.ToInt32(elements[1], 16);
 
@@ -182,11 +277,45 @@ public class Controller : MonoBehaviour
                 player1X = ((float)(player1X) / 64.0f);
                 player2X = ((float)(player2X) / 64.0f);
 
+
+                player1Buffer.Add(player1X);
+                player2Buffer.Add(player2X);
+
+                //calculate new position
+                float player1Sum = 0.0f;
+                float player2Sum = 0.0f;
+                for (int i = 0; i < player1Buffer.Count; i++)
+                {
+                    player2Sum += player2Buffer.getValue(i);
+                    player1Sum += player1Buffer.getValue(i);
+                }
+                player1Slider = player1Sum / player1Buffer.Count;
+                player2Slider = player2Sum / player2Buffer.Count;
+
+                if (isInSmoothingArea(player1Slider, player1SliderLastUsedValue))
+                {
+                    player1SliderLastUsedValue = player1Slider;
+                }
+                else
+                {
+                    player1Slider = player1SliderLastUsedValue;
+                }
+
+                if (isInSmoothingArea(player2Slider, player2SliderLastUsedValue))
+                {
+                    player2SliderLastUsedValue = player2Slider;
+                }
+                else
+                {
+                    player2Slider = player2SliderLastUsedValue;
+                }
+
+
                 GameData.Instance.Axis1 = player1Y * 16.0f;
                 GameData.Instance.Axis2 = player2Y * 16.0f;
-                
-                GameData.Instance.Y1 = player1X;
-                GameData.Instance.Y2 = player2X;
+
+                GameData.Instance.Y1 = player1Slider;
+                GameData.Instance.Y2 = player2Slider;
 
 
             }
@@ -197,44 +326,76 @@ public class Controller : MonoBehaviour
             {
                 GameData.Instance.streams[0].Write("4");
                 GameData.Instance.streams[1].Write("4");
-                receivedData = GameData.Instance.streams[0].ReadLine();
-                received = receivedData.Split(' ');
-                receivedData1 = GameData.Instance.streams[1].ReadLine();
-                received1 = receivedData1.Split(' ');
+                recievedData = GameData.Instance.streams[0].ReadLine();
+                recieved = recievedData.Split(' ');
+                recievedData1 = GameData.Instance.streams[1].ReadLine();
+                recieved1 = recievedData1.Split(' ');
 
-                Axis1 = System.Convert.ToInt32(received[1], 16);
-                Axis2 = System.Convert.ToInt32(received1[1], 16);
+                Axis1 = System.Convert.ToInt32(recieved[1], 16);
+                Axis2 = System.Convert.ToInt32(recieved1[1], 16);
 
                 GameData.Instance.Axis1 = Axis1;
                 GameData.Instance.Axis2 = Axis2;
 
-                received[3] = received[3].Remove(3);
-                received1[3] = received1[3].Remove(3);                    //smooth
-                Y1 = System.Convert.ToInt32(received[3], 16);
-                Y2 = System.Convert.ToInt32(received1[3], 16);
+                recieved[3] = recieved[3].Remove(3);
+                recieved1[3] = recieved1[3].Remove(3);                    //smooth
+                Y1 = System.Convert.ToInt32(recieved[3], 16);
+                Y2 = System.Convert.ToInt32(recieved1[3], 16);
 
                 player1Y = ((float)(Y1) / 128.0f) - 1.0f;
                 player2Y = ((float)(Y2) / 128.0f) - 1.0f;
 
 
-                #region Springen des rechten Spielers am oberen Rand unterbinden
-                if (player1Y == 0.9921875f)
-                    jump1 = true;
+                player1Buffer.Add(player1Y);
+                player2Buffer.Add(player2Y);
 
-                if (jump1 && player1Y < 0.8f)
+                //calculate new position
+                float player1Sum = 0.0f;
+                float player2Sum = 0.0f;
+                for (int i = 0; i < player1Buffer.Count; i++)
                 {
-                    Debug.Log("Dope!");
-                    player1Y = 0.9921875f;
+                    player2Sum += player2Buffer.getValue(i);
+                    player1Sum += player1Buffer.getValue(i);
                 }
-                if (jump1 && player1Y < 0.95f && player1Y > 0.80f)
-                {
-                    Debug.Log("Clear");
-                    jump1 = false;
-                }
-                #endregion
+                player1Slider = player1Sum / player1Buffer.Count;
+                player2Slider = player2Sum / player2Buffer.Count;
 
-                GameData.Instance.Y1 = player1Y;
-                GameData.Instance.Y2 = player2Y;
+                if (isInSmoothingArea(player1Slider, player1SliderLastUsedValue))
+                {
+                    player1SliderLastUsedValue = player1Slider;
+                }
+                else
+                {
+                    player1Slider = player1SliderLastUsedValue;
+                }
+
+                if (isInSmoothingArea(player2Slider, player2SliderLastUsedValue))
+                {
+                    player2SliderLastUsedValue = player2Slider;
+                }
+                else
+                {
+                    player2Slider = player2SliderLastUsedValue;
+                }
+
+                //#region Springen des rechten Spielers am oberen Rand unterbinden
+                //if (player1Y == 0.9921875f)
+                //    jump1 = true;
+
+                //if (jump1 && player1Y < 0.8f)
+                //{
+                //    Debug.Log("Dope!");
+                //    player1Y = 0.9921875f;
+                //}
+                //if (jump1 && player1Y < 0.95f && player1Y > 0.80f)
+                //{
+                //    Debug.Log("Clear");
+                //    jump1 = false;
+                //}
+                //#endregion
+
+                GameData.Instance.Y1 = player1Slider;
+                GameData.Instance.Y2 = player2Slider;
 
             }
             #endregion
@@ -264,6 +425,20 @@ public class Controller : MonoBehaviour
         GameData.Instance.streams[0].Write("m 0\r\n");
         GameData.Instance.streams[0].ReadLine();
     }
+
+    // ______________________________________________________________________________________________________________________________
+
+    private bool isInSmoothingArea(float current, float last)
+    {
+        if (current > last + last * smoothing || current < last - last * smoothing)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    // ______________________________________________________________________________________________________________________________
 
     void OnGUI()
     {
