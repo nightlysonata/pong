@@ -67,36 +67,44 @@ public class PowerUp : MonoBehaviour
         #region powerup activation player1 keyboard
         if (Input.GetKeyDown(KeyCode.Alpha1) && powerupsP1.Count > 0)
         {
+            powerup(Player1, powerupsP1.getValue(0));
             powerupsP1.RemoveAt(0);
         }
         if (Input.GetKeyDown(KeyCode.Alpha2) && powerupsP1.Count > 1)
         {
+            powerup(Player1, powerupsP1.getValue(1));
             powerupsP1.RemoveAt(1);
         }
         if (Input.GetKeyDown(KeyCode.Alpha3) && powerupsP1.Count > 2)
         {
+            powerup(Player1, powerupsP1.getValue(2));
             powerupsP1.RemoveAt(2);
         }
         if (Input.GetKeyDown(KeyCode.Alpha4) && powerupsP1.Count > 3)
-        {            
+        {
+            powerup(Player1, powerupsP1.getValue(3));
             powerupsP1.RemoveAt(3);
         }
         #endregion
         #region powerup activation player2 keyboard
         if (Input.GetKeyDown(KeyCode.Alpha7) && powerupsP2.Count > 0)
         {
+            powerup(Player2, powerupsP2.getValue(0));
             powerupsP2.RemoveAt(0);
         }
         if (Input.GetKeyDown(KeyCode.Alpha8) && powerupsP2.Count > 1)
         {
+            powerup(Player2, powerupsP2.getValue(1));
             powerupsP2.RemoveAt(1);
         }
         if (Input.GetKeyDown(KeyCode.Alpha9) && powerupsP2.Count > 2)
         {
+            powerup(Player2, powerupsP2.getValue(2));
             powerupsP2.RemoveAt(2);
         }
         if (Input.GetKeyDown(KeyCode.Alpha0) && powerupsP2.Count > 3)
         {
+            powerup(Player2, powerupsP2.getValue(3));
             powerupsP2.RemoveAt(3);
         }
         #endregion
@@ -164,18 +172,22 @@ public class PowerUp : MonoBehaviour
         {
             if (((GameData.Instance.buttonVal & GameData.Instance.SW6) != 0) && powerupsP1.Count > 0)
             {
+                powerup(Player1, powerupsP1.getValue(0));
                 powerupsP1.RemoveAt(0);
             }
             if (((GameData.Instance.buttonVal & GameData.Instance.SW4) != 0) && powerupsP1.Count > 1)
             {
+                powerup(Player1, powerupsP1.getValue(1));
                 powerupsP1.RemoveAt(1);
             }
             if (((GameData.Instance.buttonVal & GameData.Instance.SW3) != 0) && powerupsP1.Count > 2)
             {
+                powerup(Player1, powerupsP1.getValue(2));
                 powerupsP1.RemoveAt(2);
             }
             if (((GameData.Instance.buttonVal & GameData.Instance.SW5) != 0) && powerupsP1.Count > 3)
             {
+                powerup(Player1, powerupsP1.getValue(3));
                 powerupsP1.RemoveAt(3);
             }
         }
@@ -186,18 +198,22 @@ public class PowerUp : MonoBehaviour
         {
             if (((GameData.Instance.buttonVal1 & GameData.Instance.SW6) != 0) && powerupsP2.Count > 0)
             {
+                powerup(Player2, powerupsP2.getValue(0));
                 powerupsP2.RemoveAt(0);
             }
             if (((GameData.Instance.buttonVal1 & GameData.Instance.SW4) != 0) && powerupsP2.Count > 1)
             {
+                powerup(Player2, powerupsP2.getValue(1));
                 powerupsP2.RemoveAt(1);
             }
             if (((GameData.Instance.buttonVal1 & GameData.Instance.SW3) != 0) && powerupsP2.Count > 2)
             {
+                powerup(Player2, powerupsP2.getValue(2));
                 powerupsP2.RemoveAt(2);
             }
             if (((GameData.Instance.buttonVal1 & GameData.Instance.SW5) != 0) && powerupsP2.Count > 3)
             {
+                powerup(Player2, powerupsP2.getValue(3));
                 powerupsP2.RemoveAt(3);
             }
         }
@@ -248,6 +264,7 @@ public class PowerUp : MonoBehaviour
     // ______________________________________________________________________________________________________________________________
 
     void powerup(GameObject player, int id) {
+
         GameObject opponent = null;
         if (player.name == "Player 1")
             opponent = Player2;
@@ -450,6 +467,7 @@ public class PowerUp : MonoBehaviour
 
         return Random.Range(-90.0f, 90.0f);
     }
+
     IEnumerator spawntime()
     {
             yield return new WaitForSeconds(1);
