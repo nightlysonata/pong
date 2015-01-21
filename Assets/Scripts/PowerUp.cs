@@ -30,6 +30,23 @@ public class PowerUp : MonoBehaviour
 
     public GameObject ball;
 
+    //Textures
+
+    public Texture pw1G;
+    public Texture pw2G;
+    public Texture pw3G;
+    public Texture pw4G;
+    public Texture pw5G;
+
+    public Texture pw1R;
+    public Texture pw2R;
+    public Texture pw3R;
+    public Texture pw4R;
+    public Texture pw5R;
+
+
+
+
     // ______________________________________________________________________________________________________________________________
 
     // Use this for initialization
@@ -465,11 +482,7 @@ public class PowerUp : MonoBehaviour
     {
             yield return new WaitForSeconds(1);
             powerupID = Random.Range(0, 10);
-
-            if (powerupID < 5)
-                renderer.material.color = Color.red;
-            else
-                renderer.material.color = Color.green;
+            addTexture(powerupID);
 
             transform.position = new Vector3(0, randomY(), 0);
 
@@ -477,8 +490,56 @@ public class PowerUp : MonoBehaviour
                 speeda = Random.Range(-1.0f, 1.0f);
 
             pause = false;
+
+            
            
           
+    }
+
+    void addTexture(int id) {
+
+        switch (id) {
+        
+            case 0:
+                renderer.material.mainTexture = pw1R;
+                break;
+
+            case 1:
+                renderer.material.mainTexture = pw2R;
+                break;
+
+            case 2:
+                renderer.material.mainTexture = pw3R;
+                break;
+
+            case 3:
+                renderer.material.mainTexture = pw4R;
+                break;
+
+            case 4:
+                renderer.material.mainTexture = pw5R;
+                break;
+
+            case 5:
+                renderer.material.mainTexture = pw1G;
+                break;
+
+            case 6:
+                renderer.material.mainTexture = pw2G;
+                break;
+
+            case 7:
+                renderer.material.mainTexture = pw3G;
+                break;
+
+            case 8:
+                renderer.material.mainTexture = pw4G;
+                break;
+
+            case 9:
+                renderer.material.mainTexture = pw5G;
+                break;
+        }
     }
 
     // ______________________________________________________________________________________________________________________________
