@@ -45,6 +45,7 @@ public class NewBehaviourScript : MonoBehaviour
     public GUIStyle powerup3 = new GUIStyle();
     public GUIStyle powerup4 = new GUIStyle();
     public GUIStyle powerup5 = new GUIStyle();
+    public GUIStyle button = new GUIStyle();
 
     // ______________________________________________________________________________________________________________________________
 
@@ -81,6 +82,7 @@ public class NewBehaviourScript : MonoBehaviour
         modified.fontSize = Screen.height / 7;
         anweisung.fontSize = Screen.height / 20;
         line.fontSize = Screen.height / 50;
+        button.fontSize = Screen.height / 40;
 
         //Debug.Log(GameData.Instance.buttonVal + " - " + GameData.Instance.SW2);
         if (GameData.Instance.powerup1 && GameData.Instance.player1)
@@ -225,7 +227,6 @@ public class NewBehaviourScript : MonoBehaviour
     {
         GUI.Label(new Rect(Screen.width / 2 - Screen.width / 5, Screen.height / 2 - 3 * Screen.height / 15, Screen.width / 7, Screen.height / 12.5f), playerScore[0].ToString(), modified);
         GUI.Label(new Rect(Screen.width / 2 + 0.3f * Screen.width / 5, Screen.height / 2 - 3 * Screen.height / 15, Screen.width / 7, Screen.height / 12.5f), playerScore[1].ToString(), modified);
-        GUI.Label(new Rect(10, 150, 220, 30), "bla " + rigidbody.velocity.x + " " + rigidbody.velocity.y + " " + rigidbody.velocity.z);
 
         if (!GameData.Instance.pause && !startbool)
         {
@@ -257,6 +258,10 @@ public class NewBehaviourScript : MonoBehaviour
         {
             GUI.Label(new Rect(0, 0, Screen.width, Screen.height), "", background);
             GUI.Label(new Rect(Screen.width / 2 - Screen.width / 14, Screen.height / 12, Screen.width / 7, Screen.height / 12.5f), "Pause", anweisung);
+            if (GUI.Button(new Rect(Screen.width / 2 + 2 * Screen.width / 14, Screen.height / 2 + Screen.height / 3, Screen.width / 9, Screen.height / 15f), "Hauptmenu", button))
+            {
+                Application.LoadLevel("MainMenu");
+            }
             GUI.Label(new Rect(Screen.width / 2 + Screen.width / 14, Screen.height / 11f, Screen.width / 7, Screen.height / 12.5f), "Druecke P um weiterzuspielen", powerups); 
             GUI.Label(new Rect(Screen.width / 2 - 6.5f * Screen.width / 30, Screen.height / 2 - 4 * Screen.height / 15, Screen.width / 22, Screen.width / 22), "", powerup1);
             GUI.Label(new Rect(Screen.width / 2 - 6.5f * Screen.width / 30, Screen.height / 2 - 2 * Screen.height / 15, Screen.width / 22, Screen.width / 22), "", powerup2);

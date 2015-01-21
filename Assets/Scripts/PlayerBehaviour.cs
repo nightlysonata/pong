@@ -211,12 +211,4 @@ public class PlayerBehaviour : MonoBehaviour
 
     // ______________________________________________________________________________________________________________________________
 
-    void OnGUI()
-    {
-        // Draw the scoreboard for the two palyers
-        //GUI.Label(new Rect(10, 50, 220, 30), rotate1.w.ToString());
-        //GUI.Label(new Rect(10, 70, 220, 30), rotate1.x.ToString());
-        //GUI.Label(new Rect(10, 90, 220, 30), rotate1.y.ToString());
-        //GUI.Label(new Rect(10, 0, 220, 30), rotate1.z.ToString());
-    }
 }

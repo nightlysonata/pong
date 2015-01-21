@@ -147,9 +147,9 @@ public class PowerUp : MonoBehaviour
 
             if ((GameData.Instance.buttonVal & GameData.Instance.SW4) != 0 && GameData.Instance.lastButton1 != 1)
             {
-
+                powerup(Player1, powerupsP1.getValue(index1));
                 powerupsP1.RemoveAt(index1);
-                GameData.Instance.lastButton = 1;
+                GameData.Instance.lastButton1 = 1;
 
             }
         }
@@ -172,9 +172,11 @@ public class PowerUp : MonoBehaviour
             }
             if ((GameData.Instance.buttonVal1 & GameData.Instance.SW3) != 0)
             {
+                powerup(Player1, powerupsP1.getValue(0));
                 powerupsP2.RemoveAt(index2);
+                GameData.Instance.lastButton1 = 1;
             }
-        }
+                    }
         #endregion
 
         #region powerup activation player1 2 controller
@@ -580,10 +582,4 @@ public class PowerUp : MonoBehaviour
     }
 
     // ______________________________________________________________________________________________________________________________
-
-    void OnGUI()
-    {
-        GUI.Label(new Rect(10, 90, 220, 30), powerupsP1.getValue(0).ToString() + " " + powerupsP1.getValue(1).ToString() + " " + powerupsP1.getValue(2).ToString() + " " + powerupsP1.getValue(3).ToString());
-        GUI.Label(new Rect(10, 110, 220, 30), powerupsP2.getValue(0).ToString() + " " + powerupsP2.getValue(1).ToString() + " " + powerupsP2.getValue(2).ToString() + " " + powerupsP2.getValue(3).ToString()); ;
-    }
 }
