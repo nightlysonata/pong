@@ -139,16 +139,10 @@ public class PowerUp : MonoBehaviour
 
             if ((GameData.Instance.buttonVal & GameData.Instance.SW4) != 0 && GameData.Instance.lastButton1 != 1)
             {
-<<<<<<< HEAD
+
                 powerupsP1.RemoveAt(index1);
                 GameData.Instance.lastButton = 1;
-||||||| merged common ancestors
-                powerupPlayer1.RemoveAt(index1);
-                GameData.Instance.lastButton = 1;
-=======
-                powerupPlayer1.RemoveAt(index1);
-                GameData.Instance.lastButton1 = 1;
->>>>>>> master
+
             }
         }
 
