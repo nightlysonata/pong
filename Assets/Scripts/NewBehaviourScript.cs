@@ -264,11 +264,11 @@ public class NewBehaviourScript : MonoBehaviour
             GUI.Label(new Rect(Screen.width / 2 - 6.5f * Screen.width / 30, Screen.height / 2 + 2 * Screen.height / 15, Screen.width / 22, Screen.width / 22), "", powerup4);
             GUI.Label(new Rect(Screen.width / 2 - 6.5f * Screen.width / 30, Screen.height / 2 + 4 * Screen.height / 15, Screen.width / 22, Screen.width / 22), "", powerup5);
             
-            GUI.Label(new Rect(Screen.width / 2 - 3f * Screen.width / 30, Screen.height / 2 - 4 * Screen.height / 15, Screen.width / 3, Screen.width / 22), "jfksalögdksaljfdklösagnldjskbgjföab kjdsnafjdkslajfkldösacmldsa", powerups);
-            GUI.Label(new Rect(Screen.width / 2 - 3f * Screen.width / 30, Screen.height / 2 - 2 * Screen.height / 15, Screen.width / 3, Screen.width / 22), "jfksalögdksaljfdklösagnldjskbgjföab kjdsnafjdkslajfkldösacmldsa", powerups);
-            GUI.Label(new Rect(Screen.width / 2 - 3f * Screen.width / 30, Screen.height / 2 - 0 * Screen.height / 15, Screen.width / 3, Screen.width / 22), "jfksalögdksaljfdklösagnldjskbgjföab kjdsnafjdkslajfkldösacmldsa", powerups);
-            GUI.Label(new Rect(Screen.width / 2 - 3f * Screen.width / 30, Screen.height / 2 + 2 * Screen.height / 15, Screen.width / 3, Screen.width / 22), "jfksalögdksaljfdklösagnldjskbgjföab kjdsnafjdkslajfkldösacmldsa", powerups);
-            GUI.Label(new Rect(Screen.width / 2 - 3f * Screen.width / 30, Screen.height / 2 + 4 * Screen.height / 15, Screen.width / 3, Screen.width / 22), "jfksalögdksaljfdklösagnldjskbgjföab kjdsnafjdkslajfkldösacmldsa", powerups);
+            GUI.Label(new Rect(Screen.width / 2 - 3f * Screen.width / 30, Screen.height / 2 - 4 * Screen.height / 15, Screen.width / 3, Screen.width / 22), "Was that bat always this small?!", powerups);
+            GUI.Label(new Rect(Screen.width / 2 - 3f * Screen.width / 30, Screen.height / 2 - 2 * Screen.height / 15, Screen.width / 3, Screen.width / 22), "'Come closer...' - Centerline 2015", powerups);
+            GUI.Label(new Rect(Screen.width / 2 - 3f * Screen.width / 30, Screen.height / 2 - 0 * Screen.height / 15, Screen.width / 3, Screen.width / 22), "To be rendered, or not to be rendered, that's the question.", powerups);
+            GUI.Label(new Rect(Screen.width / 2 - 3f * Screen.width / 30, Screen.height / 2 + 2 * Screen.height / 15, Screen.width / 3, Screen.width / 22), "Sometimes you can hit even the things you cannot see.", powerups);
+            GUI.Label(new Rect(Screen.width / 2 - 3f * Screen.width / 30, Screen.height / 2 + 4 * Screen.height / 15, Screen.width / 3, Screen.width / 22), "Bigger is sometimes better", powerups);
         }
 
         if (GameData.Instance.pause && GameData.Instance.gamemode == 1)

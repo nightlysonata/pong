@@ -23,15 +23,6 @@ public class PowerUp : MonoBehaviour
 
     private int player;
 
-    private bool small1;
-    private bool small2;
-
-    private bool big1;
-    private bool big2;
-
-    private bool middlel1;
-    private bool middlel2;
-
     //private bool start = true; not used
 
     public GameObject Player1;
@@ -327,10 +318,10 @@ public class PowerUp : MonoBehaviour
         Vector3 first = player.transform.lossyScale;
         Debug.Log("firstnegscale1" + first);
         player.transform.localScale -= new Vector3(0, first.y * 0.3f, 0);
-        small1 = true;
+
         yield return new WaitForSeconds(10.0f);
         player.transform.localScale = new Vector3(2.5f, 30, 1);
-        small1 = false;
+
     }
 
     #endregion
@@ -342,10 +333,10 @@ public class PowerUp : MonoBehaviour
         Vector3 first = player.transform.lossyScale;
         Debug.Log("firstposscale1" + first);
         player.transform.localScale += new Vector3(0, first.y * 0.3f, 0);
-        big2 = true;
+
         yield return new WaitForSeconds(10.0f);
         player.transform.localScale = first;
-        big2 = false;
+
     }
 
     #endregion
@@ -356,10 +347,10 @@ public class PowerUp : MonoBehaviour
     {
         Vector3 first = player.transform.position;
         player.transform.position -= new Vector3(first.x * 0.1f, 0, 0);
-        middlel2 = true;
+
         yield return new WaitForSeconds(10.0f);
         player.transform.position = new Vector3(player.transform.position.x * 1.10f, player.transform.position.y, 0);
-        middlel2 = false;
+
     }
     #endregion
 
